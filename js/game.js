@@ -364,14 +364,26 @@ $.renderInterface = function () {
       render: 1,
     });
     if (powerupOn) {
-      $.ctxmg.fillStyle =
-        "hsla(0, 0%, 100%, " + (0.25 + ($.powerupTimers[i] / 300) * 0.75) + ")";
+      $.ctxmg.fillStyle = "hsla(0, 0%, 100%, 1)";
     } else {
       $.ctxmg.fillStyle = "hsla(0, 0%, 100%, 0.25)";
     }
     $.ctxmg.fill();
     if (powerupOn) {
-      var powerupBar = {
+      let powerupBarBack = {
+        x: powerupText.ex + 5,
+        y: powerupText.sy,
+        width: 110,
+        height: 5,
+      };
+      $.ctxmg.fillStyle = "hsla(0, 0%, 0%, 0.25)";
+      $.ctxmg.fillRect(
+        powerupBarBack.x,
+        powerupBarBack.y,
+        powerupBarBack.width,
+        powerupBarBack.height
+      );
+      let powerupBar = {
         x: powerupText.ex + 5,
         y: powerupText.sy,
         width: 110,
