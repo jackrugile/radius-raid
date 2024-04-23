@@ -18,7 +18,7 @@ $.Particle.prototype.update = function (i) {
   this.y += Math.sin(this.direction) * (this.speed * $.dt);
   this.ex = this.x - Math.cos(this.direction) * this.speed;
   this.ey = this.y - Math.sin(this.direction) * this.speed;
-  this.speed *= this.friction;
+  this.speed += (0 - this.speed) * (1 - Math.exp(-(1 - this.friction) * $.dt));
 
   /*==============================================================================
   Lock Bounds
@@ -33,12 +33,11 @@ $.Particle.prototype.update = function (i) {
   /*==============================================================================
   Update View
   ==============================================================================*/
+  this.inView = 0;
   if (
     $.util.pointInRect(this.ex, this.ey, -$.screen.x, -$.screen.y, $.cw, $.ch)
   ) {
     this.inView = 1;
-  } else {
-    this.inView = 0;
   }
 };
 
@@ -51,14 +50,10 @@ $.Particle.prototype.render = function (i) {
     $.ctxmg.moveTo(this.x, this.y);
     $.ctxmg.lineTo(this.ex, this.ey);
     $.ctxmg.lineWidth = this.lineWidth;
-    $.ctxmg.strokeStyle =
-      "hsla(" +
-      this.hue +
-      ", " +
-      this.saturation +
-      "%, " +
-      $.util.rand(50, 100) +
-      "%, 1)";
+    $.ctxmg.strokeStyle = `hsla(${this.hue}, ${this.saturation}%, ${$.util.rand(
+      50,
+      100
+    )}%, 1)`;
     $.ctxmg.stroke();
   }
 };
