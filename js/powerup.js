@@ -84,8 +84,8 @@ $.Powerup.prototype.update = function (i) {
         maxSpeed: 15,
         minDirection: 0,
         maxDirection: $.twopi,
-        hue: 0,
-        saturation: 0,
+        hue: this.hue,
+        saturation: this.saturation,
       })
     );
     $.powerups.splice(i, 1);
