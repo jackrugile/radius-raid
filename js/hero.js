@@ -192,17 +192,23 @@ $.Hero.prototype.update = function () {
     Check Collisions
     ==============================================================================*/
     this.takingDamage = 0;
-    var ei = $.enemies.length;
+    let ei = $.enemies.length;
     while (ei--) {
-      var enemy = $.enemies[ei];
+      let enemy = $.enemies[ei];
       if (
         enemy.inView &&
         $.util.distance(this.x, this.y, enemy.x, enemy.y) <=
           this.radius + enemy.radius
       ) {
-        $.particleEmitters.push(
-          new $.ParticleEmitter({
-            x: this.x,
+        this.takingDamage = 1;
+        break;
+      }
+    }
+
+    if (this.takingDamage) {
+      $.particleEmitters.push(
+        new $.ParticleEmitter({
+          x: this.x,
             y: this.y,
             count: 2,
             spawnRange: 0,
@@ -213,15 +219,14 @@ $.Hero.prototype.update = function () {
             maxDirection: $.twopi,
             hue: 0,
             saturation: 0,
-          })
-        );
-        this.takingDamage = 1;
-        this.life -= 0.0075;
+        })
+      );
+      this.takingDamage = 1;
+      //this.life -= 0.0075;
 
-        $.rumble.level = 3;
-        if (Math.floor($.tick) % 5 == 0) {
-          $.audio.play("takingDamage");
-        }
+      $.rumble.level = 3;
+      if (Math.floor($.tick) % 5 == 0) {
+        $.audio.play("takingDamage");
       }
     }
   }
