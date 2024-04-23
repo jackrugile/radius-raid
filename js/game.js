@@ -100,6 +100,8 @@ $.init = function () {
   $.levelPops = [];
   $.powerupTimers = [];
 
+  $.powerupDuration = 300;
+
   $.resizecb();
   $.bindEvents();
   $.setupStates();
@@ -386,7 +388,7 @@ $.renderInterface = function () {
       $.ctxmg.fillRect(
         powerupBar.x,
         powerupBar.y,
-        ($.powerupTimers[i] / 300) * powerupBar.width,
+        ($.powerupTimers[i] / $.powerupDuration) * powerupBar.width,
         powerupBar.height
       );
     }

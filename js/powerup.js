@@ -72,7 +72,7 @@ $.Powerup.prototype.update = function (i) {
     )
   ) {
     $.audio.play("powerup");
-    $.powerupTimers[this.type] = 300;
+    $.powerupTimers[this.type] = $.powerupDuration;
     $.particleEmitters.push(
       new $.ParticleEmitter({
         x: this.x + this.width / 2,
