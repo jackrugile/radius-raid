@@ -6,10 +6,10 @@ This was originally an entry for [js13kGames](http://js13kgames.com) 2013, but h
 
 # Controls
 
-**Move:** WASD/Arrows
-**Aim/Fire:** Mouse
-**Pause:** P
-**Mute:** M
+- **Move:** WASD/Arrows
+- **Aim/Fire:** Mouse
+- **Pause:** P
+- **Mute:** M
 
 # Credits
 
