@@ -88,8 +88,8 @@ $.Hero.prototype.update = function () {
     /*==============================================================================
     Update Direction
     ==============================================================================*/
-    var dx = $.mouse.x - this.x,
-      dy = $.mouse.y - this.y;
+    let dx = $.mouse.x - this.x;
+    let dy = $.mouse.y - this.y;
     this.direction = Math.atan2(dy, dx);
 
     /*==============================================================================
@@ -112,30 +112,30 @@ $.Hero.prototype.update = function () {
           this.weapon.fireRateTick - this.weapon.fireRate;
         this.weapon.fireFlag = 6;
 
+        let spreadStart = 0;
+        let spreadStep = 0;
+
         if (this.weapon.count > 1) {
-          var spreadStart = -this.weapon.spread / 2;
-          var spreadStep = this.weapon.spread / (this.weapon.count - 1);
-        } else {
-          var spreadStart = 0;
-          var spreadStep = 0;
+          spreadStart = -this.weapon.spread / 2;
+          spreadStep = this.weapon.spread / (this.weapon.count - 1);
         }
 
-        var gunX =
+        let gunX =
           this.x +
           Math.cos(this.direction) * (this.radius + this.weapon.bullet.size);
-        var gunY =
+        let gunY =
           this.y +
           Math.sin(this.direction) * (this.radius + this.weapon.bullet.size);
 
-        for (var i = 0; i < this.weapon.count; i++) {
+        for (let i = 0; i < this.weapon.count; i++) {
           $.bulletsFired++;
-          var color = this.weapon.bullet.strokeStyle;
+          let color = this.weapon.bullet.strokeStyle;
           if (
             $.powerupTimers[2] > 0 ||
             $.powerupTimers[3] > 0 ||
             $.powerupTimers[4] > 0
           ) {
-            var colors = [];
+            let colors = [];
             if ($.powerupTimers[2] > 0) {
               colors.push(
                 "hsl(" +
@@ -209,16 +209,16 @@ $.Hero.prototype.update = function () {
       $.particleEmitters.push(
         new $.ParticleEmitter({
           x: this.x,
-            y: this.y,
-            count: 2,
-            spawnRange: 0,
-            friction: 0.85,
-            minSpeed: 2,
-            maxSpeed: 15,
-            minDirection: 0,
-            maxDirection: $.twopi,
-            hue: 0,
-            saturation: 0,
+          y: this.y,
+          count: 2,
+          spawnRange: 0,
+          friction: 0.85,
+          minSpeed: 2,
+          maxSpeed: 15,
+          minDirection: 0,
+          maxDirection: $.twopi,
+          hue: 0,
+          saturation: 0,
         })
       );
       this.takingDamage = 1;
@@ -237,8 +237,10 @@ Render
 ==============================================================================*/
 $.Hero.prototype.render = function () {
   if (this.life > 0) {
+    let fillStyle = this.fillStyle;
+
     if (this.takingDamage) {
-      var fillStyle = "hsla(0, 0%, " + $.util.rand(0, 100) + "%, 1)";
+      fillStyle = "hsla(0, 0%, " + $.util.rand(0, 100) + "%, 1)";
       $.ctxmg.fillStyle =
         "hsla(0, 0%, " +
         $.util.rand(0, 100) +
@@ -248,14 +250,12 @@ $.Hero.prototype.render = function () {
       $.ctxmg.fillRect(-$.screen.x, -$.screen.y, $.cw, $.ch);
     } else if (this.weapon.fireFlag > 0) {
       this.weapon.fireFlag -= $.dt;
-      var fillStyle =
+      fillStyle =
         "hsla(" +
         $.util.rand(0, 359) +
         ", 100%, " +
         $.util.rand(20, 80) +
         "%, 1)";
-    } else {
-      var fillStyle = this.fillStyle;
     }
 
     $.ctxmg.save();
