@@ -121,6 +121,7 @@ $.reset = function () {
   $.indexGlobal = 0;
   $.dt = 1;
   $.lt = 0;
+  $.pt = null;
   $.elapsed = 0;
   $.tick = 0;
 
@@ -187,31 +188,32 @@ $.reset = function () {
 Create Favicon
 ==============================================================================*/
 $.renderFavicon = function () {
-  var favicon = document.getElementById("favicon"),
-    favc = document.createElement("canvas"),
-    favctx = favc.getContext("2d"),
-    faviconGrid = [
-      [1, 1, 1, 1, 1, , , 1, 1, 1, 1, 1, 1, 1, 1, 1],
-      [1, , , , , , , , , , , , , , , 1],
-      [1, , , , , , , , , , , , , , , 1],
-      [1, , , , , 1, 1, , , 1, 1, 1, 1, 1, , 0],
-      [1, , , , , 1, 1, , , 1, 1, 1, 1, 1, , 0],
-      [1, , , , , 1, 1, , , 1, 1, , , , , 1],
-      [1, , , , , 1, 1, , , 1, 1, , , , , 1],
-      [1, , , , , 1, 1, , , 1, 1, , , , , 1],
-      [1, , , , , 1, 1, , , 1, 1, , , , , 1],
-      [1, , , , , 1, 1, , , 1, 1, , , , , 1],
-      [1, , , , , 1, 1, , , 1, 1, , , , , 1],
-      [, , 1, 1, 1, 1, 1, , , 1, 1, , , , , 1],
-      [, , 1, 1, 1, 1, 1, , , 1, 1, , , , , 1],
-      [1, , , , , , , , , , , , , , , 1],
-      [1, , , , , , , , , , , , , , , 1],
-      [1, 1, 1, 1, 1, 1, 1, 1, 1, , , 1, 1, 1, 1, 1],
-    ];
+  let favicon = document.getElementById("favicon");
+  let favc = document.createElement("canvas");
+  let favctx = favc.getContext("2d");
+  // prettier-ignore
+  let faviconGrid = [
+    [ 1, 1, 1, 1, 1,  ,  , 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
+    [ 1,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , 1 ],
+    [ 1,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , 1 ],
+    [ 1,  ,  ,  ,  , 1, 1,  ,  , 1, 1, 1, 1, 1,  , 0 ],
+    [ 1,  ,  ,  ,  , 1, 1,  ,  , 1, 1, 1, 1, 1,  , 0 ],
+    [ 1,  ,  ,  ,  , 1, 1,  ,  , 1, 1,  ,  ,  ,  , 1 ],
+    [ 1,  ,  ,  ,  , 1, 1,  ,  , 1, 1,  ,  ,  ,  , 1 ],
+    [ 1,  ,  ,  ,  , 1, 1,  ,  , 1, 1,  ,  ,  ,  , 1 ],
+    [ 1,  ,  ,  ,  , 1, 1,  ,  , 1, 1,  ,  ,  ,  , 1 ],
+    [ 1,  ,  ,  ,  , 1, 1,  ,  , 1, 1,  ,  ,  ,  , 1 ],
+    [ 1,  ,  ,  ,  , 1, 1,  ,  , 1, 1,  ,  ,  ,  , 1 ],
+    [  ,  , 1, 1, 1, 1, 1,  ,  , 1, 1,  ,  ,  ,  , 1 ],
+    [  ,  , 1, 1, 1, 1, 1,  ,  , 1, 1,  ,  ,  ,  , 1 ],
+    [ 1,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , 1 ],
+    [ 1,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , 1 ],
+    [ 1, 1, 1, 1, 1, 1, 1, 1, 1,  ,  , 1, 1, 1, 1, 1 ]
+  ];
   favc.width = favc.height = 16;
   favctx.beginPath();
-  for (var y = 0; y < 16; y++) {
-    for (var x = 0; x < 16; x++) {
+  for (let y = 0; y < 16; y++) {
+    for (let x = 0; x < 16; x++) {
       if (faviconGrid[y][x] === 1) {
         favctx.rect(x, y, 1, 1);
       }
@@ -796,14 +798,22 @@ $.spawnEnemy = function (type) {
 };
 
 $.spawnEnemies = function () {
-  var floorTick = Math.floor($.tick);
   for (var i = 0; i < $.level.distributionCount; i++) {
-    var timeCheck = $.level.distribution[i];
+    var timeCheck = $.level.distribution[i].time;
     if ($.levelDiffOffset > 0) {
       timeCheck = Math.max(1, timeCheck - $.levelDiffOffset * 2);
     }
-    if (floorTick % timeCheck === 0) {
-      $.enemies.push($.spawnEnemy(i));
+
+    let timeDiff = Date.now() - $.level.distribution[i].lastSpawn;
+    let timeCheckNormalized = timeCheck * (1000 / 60);
+    let timeOverflow = Math.min(
+      timeCheckNormalized,
+      timeDiff - timeCheckNormalized
+    );
+
+    if (timeDiff >= timeCheckNormalized) {
+      $.level.distribution[i].lastSpawn = Date.now() - timeOverflow;
+      $.enemies.push($.spawnEnemy(10));
     }
   }
 };
@@ -923,7 +933,6 @@ $.updateDelta = function () {
   $.dt = $.dt > 10 ? 10 : $.dt;
   $.lt = now;
   $.elapsed += $.dt;
-  console.log($.dt);
 };
 
 $.updateScreen = function () {
@@ -945,12 +954,19 @@ $.updateScreen = function () {
     yModify = 0.5;
   }
 
+  // this.vy += (0 - this.vy) * (1 - Math.exp(-0.1 * $.dt));
+
   xSnap = ($.cw * xModify - $.hero.x - $.screen.x) / 30;
   ySnap = ($.ch * yModify - $.hero.y - $.screen.y) / 30;
 
   // ease to new coordinates
-  $.screen.x += xSnap * $.dt;
-  $.screen.y += ySnap * $.dt;
+  // $.screen.x += xSnap * $.dt;
+  // $.screen.y += ySnap * $.dt;
+
+  $.screen.x +=
+    ($.cw * xModify - $.hero.x - $.screen.x) * (1 - Math.exp(-0.1 * $.dt));
+  $.screen.y +=
+    ($.cy * yModify - $.hero.y - $.screen.y) * (1 - Math.exp(-0.1 * $.dt));
 
   // update rumble levels, keep X and Y changes consistent, apply rumble
   if ($.rumble.level > 0) {
@@ -1048,7 +1064,7 @@ $.updatePowerupTimers = function () {
   // HEALTH
   if ($.powerupTimers[0] > 0) {
     if ($.hero.life < 1) {
-      $.hero.life += 0.001;
+      $.hero.life += 0.001 * $.dt;
     }
     if ($.hero.life > 1) {
       $.hero.life = 1;
@@ -1229,6 +1245,7 @@ $.setState = function (state) {
   }
 
   if (state == "pause") {
+    $.pt = Date.now();
     $.mouse.down = 0;
     $.screenshot = $.ctxmg.getImageData(0, 0, $.cw, $.ch);
     var resumeButton = new $.Button({
@@ -1265,6 +1282,16 @@ $.setState = function (state) {
       },
     });
     $.buttons.push(menuButton);
+  }
+
+  if (state == "play") {
+    $.lt = Date.now();
+
+    if ($.pt) {
+      for (let i = 0; i < $.level.distribution.length; i++) {
+        $.level.distribution[i].lastSpawn += Date.now() - $.pt;
+      }
+    }
   }
 
   if (state == "gameover") {

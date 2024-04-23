@@ -42,7 +42,12 @@ $.Bullet.prototype.update = function (i) {
   var ei = $.enemies.length;
   while (ei--) {
     var enemy = $.enemies[ei];
-    if ($.util.distance(this.x, this.y, enemy.x, enemy.y) <= enemy.radius) {
+    if (
+      $.util.distance(this.x, this.y, enemy.x, enemy.y) <=
+        enemy.radius + this.size / 2 ||
+      $.util.distance(this.ex, this.ey, enemy.x, enemy.y) <=
+        enemy.radius + this.size / 2
+    ) {
       if (this.enemiesHit.indexOf(enemy.index) == -1) {
         $.particleEmitters.push(
           new $.ParticleEmitter({
@@ -61,10 +66,6 @@ $.Bullet.prototype.update = function (i) {
 
         this.enemiesHit.push(enemy.index);
         enemy.receiveDamage(ei, this.damage);
-
-        if (this.enemiesHit.length > 3) {
-          $.bullets.splice(i, 1);
-        }
       }
       if (!this.piercing) {
         $.bullets.splice(i, 1);

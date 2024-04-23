@@ -9,7 +9,7 @@ $.Hero = function () {
   this.vmax = 4;
   this.vmax = 6;
   this.direction = 0;
-  this.accel = 0.5;
+  this.accel = 0.75;
   this.radius = 10;
   this.life = 1;
   this.takingDamage = 0;
@@ -62,9 +62,6 @@ $.Hero.prototype.update = function () {
         this.vy = this.vmax;
       }
     }
-
-    // this.vx *= 0.9;
-    // this.vy *= 0.9;
 
     this.vx += (0 - this.vx) * (1 - Math.exp(-0.1 * $.dt));
     this.vy += (0 - this.vy) * (1 - Math.exp(-0.1 * $.dt));
@@ -220,6 +217,7 @@ $.Hero.prototype.update = function () {
         );
         this.takingDamage = 1;
         this.life -= 0.0075;
+
         $.rumble.level = 3;
         if (Math.floor($.tick) % 5 == 0) {
           $.audio.play("takingDamage");

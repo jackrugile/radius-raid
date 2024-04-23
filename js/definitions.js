@@ -234,7 +234,7 @@ $.definitions.enemies = [
         speed = this.speed / $.slowEnemyDivider;
       }
 
-      this.direction += $.util.rand(-0.15, 0.15);
+      this.direction += $.util.rand(-0.15 * $.dt, 0.15 * $.dt);
       this.vx = Math.cos(this.direction) * speed;
       this.vy = Math.sin(this.direction) * speed;
     },
@@ -344,11 +344,11 @@ $.definitions.enemies = [
           this.lightness +
           "%, 1)";
       } else {
-        this.vx += $.util.rand(-0.25, 0.25);
-        this.vy += $.util.rand(-0.25, 0.25);
+        this.vx += $.util.rand(-0.25 * $.dt, 0.25 * $.dt);
+        this.vy += $.util.rand(-0.25 * $.dt, 0.25 * $.dt);
         this.radius += growth * $.dt;
-        var hue = $.util.rand(0, 360);
-        lightness = $.util.rand(50, 80);
+        let hue = $.util.rand(0, 360);
+        let lightness = $.util.rand(50, 80);
         this.fillStyle = "hsla(" + hue + ", 100%, " + lightness + "%, 0.2)";
         this.strokeStyle = "hsla(" + hue + ", 100%, " + lightness + "%, 1)";
       }
@@ -516,7 +516,10 @@ for (var i = 0; i < $.definitions.enemies.length; i++) {
   for (var di = 0; di < i + 1; di++) {
     var value = di == i ? Math.floor((i + 1) * base * 0.75) : (i + 1) * base;
     value = i == 0 ? base : value;
-    distribution.push(value);
+    distribution.push({
+      time: value,
+      lastSpawn: Date.now(),
+    });
   }
   $.definitions.levels.push({
     killsToLevel: 10 + (i + 1) * 7,
