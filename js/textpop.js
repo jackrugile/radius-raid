@@ -13,7 +13,7 @@ $.TextPop = function (opt) {
 Update
 ==============================================================================*/
 $.TextPop.prototype.update = function (i) {
-  this.vy -= 0.05;
+  this.vy -= 0.05 * $.dt;
   this.y += this.vy * $.dt;
   this.alpha -= 0.03 * $.dt;
 
