@@ -98,7 +98,7 @@ $.Hero.prototype.update = function () {
     if (this.weapon.fireRateTick < this.weapon.fireRate) {
       this.weapon.fireRateTick += $.dt;
     } else {
-      if ($.autofire || (!$.autofire && $.mouse.down)) {
+      if ($.mouse.down) {
         $.audio.play("shoot");
         if (
           $.powerupTimers[2] > 0 ||

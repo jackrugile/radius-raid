@@ -40,7 +40,6 @@ $.init = function () {
   };
 
   $.mute = $.storage["mute"];
-  $.autofire = $.storage["autofire"];
   $.slowEnemyDivider = 3;
 
   $.keys = {
@@ -403,7 +402,7 @@ $.renderInterface = function () {
       ctx: $.ctxmg,
       x: $.cw / 2 - 10,
       y: $.ch - 20,
-      text: "MOVE\nAIM/FIRE\nAUTOFIRE\nPAUSE\nMUTE",
+      text: "MOVE\nAIM/FIRE\nPAUSE\nMUTE",
       hspacing: 1,
       vspacing: 17,
       halign: "right",
@@ -435,7 +434,7 @@ $.renderInterface = function () {
       ctx: $.ctxmg,
       x: $.cw / 2 + 10,
       y: $.ch - 20,
-      text: "WASD/ARROWS\nMOUSE\nF\nP\nM",
+      text: "WASD/ARROWS\nMOUSE\nP\nM",
       hspacing: 1,
       vspacing: 17,
       halign: "left",
@@ -1682,13 +1681,6 @@ $.setupStates = function () {
     // listen for pause
     if ($.keys.pressed.p) {
       $.setState("pause");
-    }
-
-    // always listen for autofire toggle
-    if ($.keys.pressed.f) {
-      $.autofire = ~~!$.autofire;
-      $.storage["autofire"] = $.autofire;
-      $.updateStorage();
     }
   };
 

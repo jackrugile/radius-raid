@@ -15,7 +15,6 @@ Storage.prototype.removeObject = function (key) {
 $.setupStorage = function () {
   $.storage = localStorage.getObject("radiusraid") || {
     mute: 0,
-    autofire: 0,
     score: 0,
     level: 0,
     rounds: 0,
