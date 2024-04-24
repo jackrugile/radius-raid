@@ -24,6 +24,8 @@ $.Powerup = function (opt) {
   this.height = text.height + this.vpadding * 2;
   this.x = this.x - this.width / 2;
   this.y = this.y - this.height / 2;
+  this.vx = 0;
+  this.vy = 0;
   this.direction = $.util.rand(0, $.tau);
   this.speed = $.util.rand(0.5, 2);
 };
@@ -35,25 +37,19 @@ $.Powerup.prototype.update = function (i) {
   /*==============================================================================
   Apply Forces
   ==============================================================================*/
-  this.x += Math.cos(this.direction) * this.speed * $.dt;
-  this.y += Math.sin(this.direction) * this.speed * $.dt;
+  this.vx = Math.cos(this.direction) * this.speed * $.dt;
+  this.vy = Math.sin(this.direction) * this.speed * $.dt;
+  this.x += this.vx;
+  this.y += this.vy;
 
   /*==============================================================================
   Check Bounds
   ==============================================================================*/
-  if (
-    !$.util.rectInRect(
-      this.x,
-      this.y,
-      this.width,
-      this.height,
-      0,
-      0,
-      $.ww,
-      $.wh
-    )
-  ) {
-    $.powerups.splice(i, 1);
+  if (this.x <= 0 || this.x + this.width >= $.ww) {
+    this.direction = Math.atan2(this.vy, -this.vx);
+  }
+  if (this.y <= 0 || this.y + this.height >= $.wh) {
+    this.direction = Math.atan2(-this.vy, this.vx);
   }
 
   /*==============================================================================
