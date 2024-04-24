@@ -1,7 +1,7 @@
 $.audio = {
   sounds: {},
   references: [],
-  play: function (sound) {
+  play: async function (sound) {
     if (!$.mute) {
       let audio = $.audio.sounds[sound];
       if (audio.length > 1) {
@@ -9,7 +9,9 @@ $.audio = {
       } else {
         audio = $.audio.sounds[sound][0];
       }
-      audio.pool[audio.tick].play();
+      try {
+        await audio.pool[audio.tick].play();
+      } catch (e) {}
       if (audio.tick < audio.count - 1) {
         audio.tick++;
       } else {
