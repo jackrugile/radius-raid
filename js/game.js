@@ -40,7 +40,6 @@ $.init = function () {
   };
 
   $.mute = $.storage["mute"];
-  $.slowEnemyDivider = 3;
 
   $.keys = {
     state: {
@@ -74,7 +73,7 @@ $.init = function () {
   };
   $.buttons = [];
 
-  ($.minimap = {
+  $.minimap = {
     x: 20,
     y: $.ch - Math.floor($.ch * 0.1) - 20,
     width: Math.floor($.cw * 0.1),
@@ -82,11 +81,11 @@ $.init = function () {
     scale: Math.floor($.cw * 0.1) / $.ww,
     color: "hsla(0, 0%, 0%, 0.85)",
     strokeColor: "#3a3a3a",
-  }),
-    ($.cOffset = {
-      left: 0,
-      top: 0,
-    });
+  };
+  $.cOffset = {
+    left: 0,
+    top: 0,
+  };
 
   $.levelCount = $.definitions.levels.length;
   $.states = {};
@@ -101,6 +100,9 @@ $.init = function () {
   $.powerupTimers = [];
 
   $.powerupDuration = 300;
+  $.slowEnemyDivider = 3;
+  $.healthBarParticleEmitterTickMax = 1;
+  $.healthBarParticleEmitterTick = $.healthBarParticleEmitterTickMax;
 
   $.resizecb();
   $.bindEvents();
@@ -533,7 +535,16 @@ $.renderInterface = function () {
     healthBar.height / 2
   );
 
-  if ($.hero.takingDamage && $.hero.life > 0.01) {
+  if ($.healthBarParticleEmitterTick < $.healthBarParticleEmitterTickMax) {
+    $.healthBarParticleEmitterTick += $.dt;
+  }
+
+  if (
+    $.hero.takingDamage &&
+    $.hero.life > 0 &&
+    $.healthBarParticleEmitterTick >= $.healthBarParticleEmitterTickMax
+  ) {
+    $.healthBarParticleEmitterTick = 0;
     $.particleEmitters.push(
       new $.ParticleEmitter({
         x: -$.screen.x + healthBar.x + $.hero.life * healthBar.width,
@@ -557,9 +568,9 @@ $.renderInterface = function () {
   $.ctxmg.beginPath();
   var progressText = $.text({
     ctx: $.ctxmg,
-    x: healthBar.x + healthBar.width + 40,
+    x: healthBar.x + healthBar.width + 30,
     y: 20,
-    text: "PROGRESS",
+    text: `LEVEL ${$.util.pad($.level.current + 1, 2)}`,
     hspacing: 1,
     vspacing: 1,
     halign: "top",
@@ -630,7 +641,7 @@ $.renderInterface = function () {
   $.ctxmg.beginPath();
   var scoreLabel = $.text({
     ctx: $.ctxmg,
-    x: progressBar.x + progressBar.width + 40,
+    x: progressBar.x + progressBar.width + 30,
     y: 20,
     text: "SCORE",
     hspacing: 1,
@@ -664,7 +675,7 @@ $.renderInterface = function () {
   $.ctxmg.beginPath();
   var bestLabel = $.text({
     ctx: $.ctxmg,
-    x: scoreText.ex + 40,
+    x: scoreText.ex + 30,
     y: 20,
     text: "BEST",
     hspacing: 1,
@@ -973,13 +984,13 @@ $.updateScreen = function () {
   ySnap = ($.ch * yModify - $.hero.y - $.screen.y) / 30;
 
   // ease to new coordinates
-  // $.screen.x += xSnap * $.dt;
-  // $.screen.y += ySnap * $.dt;
+  $.screen.x += xSnap * $.dt;
+  $.screen.y += ySnap * $.dt;
 
-  $.screen.x +=
-    ($.cw * xModify - $.hero.x - $.screen.x) * (1 - Math.exp(-0.1 * $.dt));
-  $.screen.y +=
-    ($.cy * yModify - $.hero.y - $.screen.y) * (1 - Math.exp(-0.1 * $.dt));
+  // $.screen.x +=
+  //   ($.cw * xModify - $.hero.x - $.screen.x) * (1 - Math.exp(-0.1 * $.dt));
+  // $.screen.y +=
+  //   ($.cy * yModify - $.hero.y - $.screen.y) * (1 - Math.exp(-0.1 * $.dt));
 
   // update rumble levels, keep X and Y changes consistent, apply rumble
   if ($.rumble.level > 0) {

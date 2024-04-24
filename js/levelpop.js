@@ -24,6 +24,7 @@ $.LevelPop.prototype.update = function (i) {
   } else {
     this.tick += $.dt;
   }
+  this.tick += $.dt;
 };
 
 /*==============================================================================

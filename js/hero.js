@@ -12,7 +12,11 @@ $.Hero = function () {
   this.accel = 0.75;
   this.radius = 10;
   this.life = 1;
+  this.particleEmitterTickMax = 1;
+  this.particleEmitterTick = this.particleEmitterTickMax;
   this.takingDamage = 0;
+  this.takingDamageAudioTickMax = 8;
+  this.takingDamageAudioTick = this.takingDamageAudioTickMax;
   this.fillStyle = "#fff";
   this.weapon = {
     fireRate: 5,
@@ -35,177 +39,195 @@ $.Hero = function () {
 Update
 ==============================================================================*/
 $.Hero.prototype.update = function () {
-  if (this.life > 0) {
-    /*==============================================================================
-    Apply Forces
-    ==============================================================================*/
-    if ($.keys.state.left) {
-      this.vx -= this.accel * $.dt;
-      if (this.vx < -this.vmax) {
-        this.vx = -this.vmax;
+  if (this.life <= 0) {
+    return;
+  }
+
+  /*==============================================================================
+  Apply Forces
+  ==============================================================================*/
+  if ($.keys.state.left) {
+    this.vx -= this.accel * $.dt;
+    if (this.vx < -this.vmax) {
+      this.vx = -this.vmax;
+    }
+  } else if ($.keys.state.right) {
+    this.vx += this.accel * $.dt;
+    if (this.vx > this.vmax) {
+      this.vx = this.vmax;
+    }
+  }
+
+  if ($.keys.state.up) {
+    this.vy -= this.accel * $.dt;
+    if (this.vy < -this.vmax) {
+      this.vy = -this.vmax;
+    }
+  } else if ($.keys.state.down) {
+    this.vy += this.accel * $.dt;
+    if (this.vy > this.vmax) {
+      this.vy = this.vmax;
+    }
+  }
+
+  this.vx += (0 - this.vx) * (1 - Math.exp(-0.1 * $.dt));
+  this.vy += (0 - this.vy) * (1 - Math.exp(-0.1 * $.dt));
+
+  this.x += this.vx * $.dt;
+  this.y += this.vy * $.dt;
+
+  /*==============================================================================
+  Lock Bounds
+  ==============================================================================*/
+  if (this.x >= $.ww - this.radius) {
+    this.x = $.ww - this.radius;
+  }
+  if (this.x <= this.radius) {
+    this.x = this.radius;
+  }
+  if (this.y >= $.wh - this.radius) {
+    this.y = $.wh - this.radius;
+  }
+  if (this.y <= this.radius) {
+    this.y = this.radius;
+  }
+
+  /*==============================================================================
+  Update Direction
+  ==============================================================================*/
+  let dx = $.mouse.x - this.x;
+  let dy = $.mouse.y - this.y;
+  this.direction = Math.atan2(dy, dx);
+
+  /*==============================================================================
+  Fire Weapon
+  ==============================================================================*/
+  if (this.weapon.fireRateTick < this.weapon.fireRate) {
+    this.weapon.fireRateTick += $.dt;
+  } else {
+    if ($.mouse.down) {
+      $.audio.play("shoot");
+      if (
+        $.powerupTimers[2] > 0 ||
+        $.powerupTimers[3] > 0 ||
+        $.powerupTimers[4] > 0
+      ) {
+        $.audio.play("shootAlt");
       }
-    } else if ($.keys.state.right) {
-      this.vx += this.accel * $.dt;
-      if (this.vx > this.vmax) {
-        this.vx = this.vmax;
+
+      this.weapon.fireRateTick =
+        this.weapon.fireRateTick - this.weapon.fireRate;
+      this.weapon.fireFlag = 6;
+
+      let spreadStart = 0;
+      let spreadStep = 0;
+
+      if (this.weapon.count > 1) {
+        spreadStart = -this.weapon.spread / 2;
+        spreadStep = this.weapon.spread / (this.weapon.count - 1);
       }
-    }
 
-    if ($.keys.state.up) {
-      this.vy -= this.accel * $.dt;
-      if (this.vy < -this.vmax) {
-        this.vy = -this.vmax;
-      }
-    } else if ($.keys.state.down) {
-      this.vy += this.accel * $.dt;
-      if (this.vy > this.vmax) {
-        this.vy = this.vmax;
-      }
-    }
+      let gunX =
+        this.x +
+        Math.cos(this.direction) * (this.radius + this.weapon.bullet.size);
+      let gunY =
+        this.y +
+        Math.sin(this.direction) * (this.radius + this.weapon.bullet.size);
 
-    this.vx += (0 - this.vx) * (1 - Math.exp(-0.1 * $.dt));
-    this.vy += (0 - this.vy) * (1 - Math.exp(-0.1 * $.dt));
-
-    this.x += this.vx * $.dt;
-    this.y += this.vy * $.dt;
-
-    /*==============================================================================
-    Lock Bounds
-    ==============================================================================*/
-    if (this.x >= $.ww - this.radius) {
-      this.x = $.ww - this.radius;
-    }
-    if (this.x <= this.radius) {
-      this.x = this.radius;
-    }
-    if (this.y >= $.wh - this.radius) {
-      this.y = $.wh - this.radius;
-    }
-    if (this.y <= this.radius) {
-      this.y = this.radius;
-    }
-
-    /*==============================================================================
-    Update Direction
-    ==============================================================================*/
-    let dx = $.mouse.x - this.x;
-    let dy = $.mouse.y - this.y;
-    this.direction = Math.atan2(dy, dx);
-
-    /*==============================================================================
-    Fire Weapon
-    ==============================================================================*/
-    if (this.weapon.fireRateTick < this.weapon.fireRate) {
-      this.weapon.fireRateTick += $.dt;
-    } else {
-      if ($.mouse.down) {
-        $.audio.play("shoot");
+      for (let i = 0; i < this.weapon.count; i++) {
+        $.bulletsFired++;
+        let color = this.weapon.bullet.strokeStyle;
         if (
           $.powerupTimers[2] > 0 ||
           $.powerupTimers[3] > 0 ||
           $.powerupTimers[4] > 0
         ) {
-          $.audio.play("shootAlt");
-        }
-
-        this.weapon.fireRateTick =
-          this.weapon.fireRateTick - this.weapon.fireRate;
-        this.weapon.fireFlag = 6;
-
-        let spreadStart = 0;
-        let spreadStep = 0;
-
-        if (this.weapon.count > 1) {
-          spreadStart = -this.weapon.spread / 2;
-          spreadStep = this.weapon.spread / (this.weapon.count - 1);
-        }
-
-        let gunX =
-          this.x +
-          Math.cos(this.direction) * (this.radius + this.weapon.bullet.size);
-        let gunY =
-          this.y +
-          Math.sin(this.direction) * (this.radius + this.weapon.bullet.size);
-
-        for (let i = 0; i < this.weapon.count; i++) {
-          $.bulletsFired++;
-          let color = this.weapon.bullet.strokeStyle;
-          if (
-            $.powerupTimers[2] > 0 ||
-            $.powerupTimers[3] > 0 ||
-            $.powerupTimers[4] > 0
-          ) {
-            let colors = [];
-            if ($.powerupTimers[2] > 0) {
-              colors.push(
-                "hsl(" +
-                  $.definitions.powerups[2].hue +
-                  ", " +
-                  $.definitions.powerups[2].saturation +
-                  "%, " +
-                  $.definitions.powerups[2].lightness +
-                  "%)"
-              );
-            }
-            if ($.powerupTimers[3] > 0) {
-              colors.push(
-                "hsl(" +
-                  $.definitions.powerups[3].hue +
-                  ", " +
-                  $.definitions.powerups[3].saturation +
-                  "%, " +
-                  $.definitions.powerups[3].lightness +
-                  "%)"
-              );
-            }
-            if ($.powerupTimers[4] > 0) {
-              colors.push(
-                "hsl(" +
-                  $.definitions.powerups[4].hue +
-                  ", " +
-                  $.definitions.powerups[4].saturation +
-                  "%, " +
-                  $.definitions.powerups[4].lightness +
-                  "%)"
-              );
-            }
-            color = colors[Math.floor($.util.rand(0, colors.length))];
+          let colors = [];
+          if ($.powerupTimers[2] > 0) {
+            colors.push(
+              "hsl(" +
+                $.definitions.powerups[2].hue +
+                ", " +
+                $.definitions.powerups[2].saturation +
+                "%, " +
+                $.definitions.powerups[2].lightness +
+                "%)"
+            );
           }
-          $.bullets.push(
-            new $.Bullet({
-              x: gunX,
-              y: gunY,
-              speed: this.weapon.bullet.speed,
-              direction: this.direction + spreadStart + i * spreadStep,
-              damage: this.weapon.bullet.damage,
-              size: this.weapon.bullet.size,
-              lineWidth: this.weapon.bullet.lineWidth,
-              strokeStyle: color,
-              piercing: this.weapon.bullet.piercing,
-            })
-          );
+          if ($.powerupTimers[3] > 0) {
+            colors.push(
+              "hsl(" +
+                $.definitions.powerups[3].hue +
+                ", " +
+                $.definitions.powerups[3].saturation +
+                "%, " +
+                $.definitions.powerups[3].lightness +
+                "%)"
+            );
+          }
+          if ($.powerupTimers[4] > 0) {
+            colors.push(
+              "hsl(" +
+                $.definitions.powerups[4].hue +
+                ", " +
+                $.definitions.powerups[4].saturation +
+                "%, " +
+                $.definitions.powerups[4].lightness +
+                "%)"
+            );
+          }
+          color = colors[Math.floor($.util.rand(0, colors.length))];
         }
+        $.bullets.push(
+          new $.Bullet({
+            x: gunX,
+            y: gunY,
+            speed: this.weapon.bullet.speed,
+            direction: this.direction + spreadStart + i * spreadStep,
+            damage: this.weapon.bullet.damage,
+            size: this.weapon.bullet.size,
+            lineWidth: this.weapon.bullet.lineWidth,
+            strokeStyle: color,
+            piercing: this.weapon.bullet.piercing,
+          })
+        );
       }
     }
+  }
 
-    /*==============================================================================
-    Check Collisions
-    ==============================================================================*/
-    this.takingDamage = 0;
-    let ei = $.enemies.length;
-    while (ei--) {
-      let enemy = $.enemies[ei];
-      if (
-        enemy.inView &&
-        $.util.distance(this.x, this.y, enemy.x, enemy.y) <=
-          this.radius + enemy.radius
-      ) {
-        this.takingDamage = 1;
-        break;
-      }
+  /*==============================================================================
+  Check Collisions
+  ==============================================================================*/
+  this.takingDamage = 0;
+  let ei = $.enemies.length;
+  while (ei--) {
+    let enemy = $.enemies[ei];
+    if (
+      enemy.inView &&
+      $.util.distance(this.x, this.y, enemy.x, enemy.y) <=
+        this.radius + enemy.radius
+    ) {
+      this.takingDamage = 1;
+      break;
     }
+  }
 
-    if (this.takingDamage) {
+  if (this.particleEmitterTick < this.particleEmitterTickMax) {
+    this.particleEmitterTick += $.dt;
+  }
+
+  if (this.takingDamageAudioTick < this.takingDamageAudioTickMax) {
+    this.takingDamageAudioTick += $.dt;
+  }
+
+  if (this.takingDamage) {
+    $.rumble.level = 3;
+
+    //this.life -= 0.0075;
+
+    if (this.particleEmitterTick >= this.particleEmitterTickMax) {
+      this.particleEmitterTick = 0;
+
       $.particleEmitters.push(
         new $.ParticleEmitter({
           x: this.x,
@@ -221,13 +243,11 @@ $.Hero.prototype.update = function () {
           saturation: 0,
         })
       );
-      this.takingDamage = 1;
-      //this.life -= 0.0075;
+    }
 
-      $.rumble.level = 3;
-      if (Math.floor($.tick) % 5 == 0) {
-        $.audio.play("takingDamage");
-      }
+    if (this.takingDamageAudioTick >= this.takingDamageAudioTickMax) {
+      this.takingDamageAudioTick = 0;
+      $.audio.play("takingDamage");
     }
   }
 };

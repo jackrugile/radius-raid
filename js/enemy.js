@@ -77,6 +77,7 @@ $.Enemy.prototype.update = function (i) {
   /*==============================================================================
   Update View
   ==============================================================================*/
+  this.inView = 0;
   if (
     $.util.arcInRect(
       this.x,
@@ -89,8 +90,6 @@ $.Enemy.prototype.update = function (i) {
     )
   ) {
     this.inView = 1;
-  } else {
-    this.inView = 0;
   }
 };
 
