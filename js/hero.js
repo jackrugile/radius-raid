@@ -19,7 +19,7 @@ $.Hero = function () {
   this.takingDamageAudioTick = this.takingDamageAudioTickMax;
   this.fillStyle = "#fff";
   this.weapon = {
-    fireRate: 5,
+    fireRateMax: 5,
     fireRateTick: 5,
     spread: 0.3,
     count: 1,
@@ -98,11 +98,18 @@ $.Hero.prototype.update = function () {
   let dx = $.mouse.x - this.x;
   let dy = $.mouse.y - this.y;
   this.direction = Math.atan2(dy, dx);
+  if ($.mouse.down) {
+    // this.vx += Math.cos(this.direction) * -0.1 * $.dt;
+    // this.vy += Math.sin(this.direction) * -0.1 * $.dt;
+
+    this.vx += (0 - this.vx) * (1 - Math.exp(-0.15 * $.dt));
+    this.vy += (0 - this.vy) * (1 - Math.exp(-0.15 * $.dt));
+  }
 
   /*==============================================================================
   Fire Weapon
   ==============================================================================*/
-  if (this.weapon.fireRateTick < this.weapon.fireRate) {
+  if (this.weapon.fireRateTick < this.weapon.fireRateMax) {
     this.weapon.fireRateTick += $.dt;
   } else {
     if ($.mouse.down) {
@@ -116,7 +123,7 @@ $.Hero.prototype.update = function () {
       }
 
       this.weapon.fireRateTick =
-        this.weapon.fireRateTick - this.weapon.fireRate;
+        this.weapon.fireRateTick - this.weapon.fireRateMax;
       this.weapon.fireFlag = 6;
 
       let spreadStart = 0;
@@ -300,5 +307,32 @@ $.Hero.prototype.render = function () {
     $.ctxmg.restore();
 
     $.util.fillCircle($.ctxmg, this.x, this.y, this.radius - 3, fillStyle);
+
+    if ($.mouse.down) {
+      let sinMult = $.powerupTimers[2] > 0 ? 0.8 : 0.2;
+      let spread = $.powerupTimers[3] > 0 ? $.pi / 6 : $.pi / 12;
+      let radiusMult = $.powerupTimers[4] > 0 ? 3 : 2;
+      let lineWidthMult = $.powerupTimers[4] > 0 ? 3 : 1;
+
+      $.ctxmg.beginPath();
+      $.ctxmg.arc(
+        this.x,
+        this.y,
+        this.radius * 2.5 + Math.sin($.tick * sinMult) * radiusMult,
+        this.direction - spread,
+        this.direction + spread,
+        false
+      );
+      $.ctxmg.lineWidth = 2 * lineWidthMult;
+      $.ctxmg.strokeStyle =
+        "hsla(" +
+        $.util.rand(0, 359) +
+        ", 100%, " +
+        $.util.rand(20, 80) +
+        "%, " +
+        $.util.rand(0.5, 1) +
+        ")";
+      $.ctxmg.stroke();
+    }
   }
 };
