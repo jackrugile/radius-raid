@@ -6,7 +6,7 @@ $.Explosion = function (opt) {
     this[k] = opt[k];
   }
   this.tick = 0;
-  this.tickMax = 20;
+  this.tickMax = 30;
   if ($.slow) {
     $.audio.play("explosionAlt");
   } else {
@@ -40,8 +40,10 @@ $.Explosion.prototype.render = function (i) {
       $.ch
     )
   ) {
-    let radius = 1 + (this.tick / (this.tickMax / 2)) * this.radius;
-    let lineWidth = $.util.rand(1, this.radius / 2);
+    let eased = $.ease.outBack(this.tick / this.tickMax, 0, 1, 1);
+    let radius = 1 + eased * this.radius;
+    let lineWidth = (eased * this.radius) / 8;
+
     $.util.strokeCircle(
       $.ctxmg,
       this.x,
@@ -58,12 +60,14 @@ $.Explosion.prototype.render = function (i) {
         ")",
       lineWidth
     );
+
     $.ctxmg.beginPath();
     let size = $.util.rand(1, 1.5);
     for (let i = 0; i < 20; i++) {
       let angle = $.util.rand(0, $.tau);
-      let x = this.x + Math.cos(angle) * radius;
-      let y = this.y + Math.sin(angle) * radius;
+      let radius2 = $.util.rand(radius - lineWidth, radius + lineWidth);
+      let x = this.x + Math.cos(angle) * radius2;
+      let y = this.y + Math.sin(angle) * radius2;
 
       $.ctxmg.rect(x - size / 2, y - size / 2, size, size);
     }
@@ -74,17 +78,9 @@ $.Explosion.prototype.render = function (i) {
       this.saturation +
       "%, " +
       $.util.rand(50, 100) +
-      "%, 1)";
-    $.ctxmg.fill();
-
-    $.ctxmg.fillStyle =
-      "hsla(" +
-      this.hue +
-      ", " +
-      this.saturation +
-      "%, 50%, " +
-      Math.min(1, Math.max(0, 0.03 - (this.tick / this.tickMax) * 0.03)) +
+      "%, " +
+      Math.min(1, Math.max(0, 1.5 - this.tick / this.tickMax)) +
       ")";
-    $.ctxmg.fillRect(-$.screen.x, -$.screen.y, $.cw, $.ch);
+    $.ctxmg.fill();
   }
 };
