@@ -17,7 +17,7 @@ $.Bullet = function (opt) {
       minSpeed: 2,
       maxSpeed: 10,
       minDirection: 0,
-      maxDirection: $.twopi,
+      maxDirection: $.tau,
       hue: 0,
       saturation: 0,
     })

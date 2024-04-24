@@ -3,7 +3,7 @@ Miscellaneous
 ==============================================================================*/
 $.util = {};
 $.pi = Math.PI;
-$.twopi = $.pi * 2;
+$.tau = $.pi * 2;
 
 /*==============================================================================
 Random Range
@@ -58,7 +58,7 @@ Shapes
 $.util.circle = function (ctx, x, y, radius) {
   radius = radius <= 0 ? 1 : radius;
   ctx.beginPath();
-  ctx.arc(x, y, radius, 0, $.twopi, false);
+  ctx.arc(x, y, radius, 0, $.tau, false);
 };
 
 $.util.fillCircle = function (ctx, x, y, radius, fillStyle) {

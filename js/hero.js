@@ -238,7 +238,7 @@ $.Hero.prototype.update = function () {
           minSpeed: 2,
           maxSpeed: 15,
           minDirection: 0,
-          maxDirection: $.twopi,
+          maxDirection: $.tau,
           hue: 0,
           saturation: 0,
         })
@@ -287,14 +287,14 @@ $.Hero.prototype.render = function () {
 
     $.ctxmg.save();
     $.ctxmg.translate(this.x, this.y);
-    $.ctxmg.rotate(this.direction - $.pi / 4 + $.twopi / 3);
+    $.ctxmg.rotate(this.direction - $.pi / 4 + $.tau / 3);
     $.ctxmg.fillStyle = fillStyle;
     $.ctxmg.fillRect(0, 0, this.radius, this.radius);
     $.ctxmg.restore();
 
     $.ctxmg.save();
     $.ctxmg.translate(this.x, this.y);
-    $.ctxmg.rotate(this.direction - $.pi / 4 - $.twopi / 3);
+    $.ctxmg.rotate(this.direction - $.pi / 4 - $.tau / 3);
     $.ctxmg.fillStyle = fillStyle;
     $.ctxmg.fillRect(0, 0, this.radius, this.radius);
     $.ctxmg.restore();

@@ -1693,7 +1693,7 @@ $.setupStates = function () {
             minSpeed: 2,
             maxSpeed: 20,
             minDirection: 0,
-            maxDirection: $.twopi,
+            maxDirection: $.tau,
             hue: 0,
             saturation: 0,
           })

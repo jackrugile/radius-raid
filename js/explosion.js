@@ -61,7 +61,7 @@ $.Explosion.prototype.render = function (i) {
     $.ctxmg.beginPath();
     let size = $.util.rand(1, 1.5);
     for (let i = 0; i < 20; i++) {
-      let angle = $.util.rand(0, $.twopi);
+      let angle = $.util.rand(0, $.tau);
       let x = this.x + Math.cos(angle) * radius;
       let y = this.y + Math.sin(angle) * radius;
 

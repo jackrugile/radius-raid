@@ -123,7 +123,7 @@ $.Enemy.prototype.receiveDamage = function (i, val) {
           minSpeed: 5,
           maxSpeed: 20,
           minDirection: 0,
-          maxDirection: $.twopi,
+          maxDirection: $.tau,
           hue: this.hue,
           saturation: this.saturation,
         })

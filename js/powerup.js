@@ -24,7 +24,7 @@ $.Powerup = function (opt) {
   this.height = text.height + this.vpadding * 2;
   this.x = this.x - this.width / 2;
   this.y = this.y - this.height / 2;
-  this.direction = $.util.rand(0, $.twopi);
+  this.direction = $.util.rand(0, $.tau);
   this.speed = $.util.rand(0.5, 2);
 };
 
@@ -83,7 +83,7 @@ $.Powerup.prototype.update = function (i) {
         minSpeed: 2,
         maxSpeed: 15,
         minDirection: 0,
-        maxDirection: $.twopi,
+        maxDirection: $.tau,
         hue: this.hue,
         saturation: this.saturation,
       })

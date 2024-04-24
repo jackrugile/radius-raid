@@ -8,7 +8,7 @@ $.ParticleEmitter = function (opt) {
   this.particles = [];
   for (let i = 0; i < this.count; i++) {
     let radius = Math.sqrt(Math.random()) * this.spawnRange;
-    let angle = Math.random() * $.twopi;
+    let angle = Math.random() * $.tau;
     let x = this.x + Math.cos(angle) * radius;
     let y = this.y + Math.sin(angle) * radius;
     this.particles.push(
