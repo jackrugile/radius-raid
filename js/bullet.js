@@ -18,8 +18,8 @@ $.Bullet = function (opt) {
       maxSpeed: 10,
       minDirection: 0,
       maxDirection: $.tau,
-      hue: 0,
-      saturation: 0,
+      hue: this.hue,
+      saturation: this.saturation,
     })
   );
 };
@@ -31,10 +31,16 @@ $.Bullet.prototype.update = function (i) {
   /*==============================================================================
   Apply Forces
   ==============================================================================*/
-  this.x += Math.cos(this.direction) * (this.speed * $.dt);
-  this.y += Math.sin(this.direction) * (this.speed * $.dt);
-  this.ex = this.x - Math.cos(this.direction) * this.size;
-  this.ey = this.y - Math.sin(this.direction) * this.size;
+  this.vx = Math.cos(this.direction) * this.speed * $.dt;
+  this.vy = Math.sin(this.direction) * this.speed * $.dt;
+  this.x += this.vx;
+  this.y += this.vy;
+  this.ex = this.x + Math.cos(this.direction) * this.size;
+  this.ey = this.y + Math.sin(this.direction) * this.size;
+  this.ex = Math.min(this.ex, $.ww - $.edgeSize);
+  this.ex = Math.max(this.ex, $.edgeSize);
+  this.ey = Math.min(this.ey, $.wh - $.edgeSize);
+  this.ey = Math.max(this.ey, $.edgeSize);
 
   /*==============================================================================
   Check Collisions
@@ -49,24 +55,21 @@ $.Bullet.prototype.update = function (i) {
         enemy.radius + this.size / 2
     ) {
       if (this.enemiesHit.indexOf(enemy.index) == -1) {
-        $.particleEmitters.push(
-          new $.ParticleEmitter({
-            x: this.x,
-            y: this.y,
-            count: Math.floor($.util.rand(2, 6)),
-            spawnRange: 0,
-            friction: 0.85,
-            minSpeed: 5,
-            maxSpeed: 12,
-            minDirection: this.direction - $.pi - $.pi / 5,
-            maxDirection: this.direction - $.pi + $.pi / 5,
-            hue: enemy.hue,
-          })
-        );
-
         this.enemiesHit.push(enemy.index);
         enemy.receiveDamage(ei, this.damage);
+        $.explosions.push(
+          new $.Explosion({
+            x: this.x + $.util.rand(-1, 1),
+            y: this.y + $.util.rand(-1, 1),
+            radius: 1 + $.util.rand(1, 3),
+            hue: this.hue,
+            saturation: this.saturation,
+            noAudio: true,
+            tickMax: 10,
+          })
+        );
       }
+
       if (!this.piercing) {
         $.bullets.splice(i, 1);
       }
@@ -76,7 +79,65 @@ $.Bullet.prototype.update = function (i) {
   /*==============================================================================
   Lock Bounds
   ==============================================================================*/
-  if (!$.util.pointInRect(this.ex, this.ey, 0, 0, $.ww, $.wh)) {
+
+  if (
+    !$.util.pointInRect(
+      this.x,
+      this.y,
+      $.edgeSize,
+      $.edgeSize,
+      $.ww - $.edgeSize * 2,
+      $.wh - $.edgeSize * 2
+    )
+  ) {
+    if (this.inView) {
+      let dir;
+      let dirRange = 0;
+      if (this.x <= $.edgeSize || this.x >= $.ww - $.edgeSize) {
+        dir = Math.atan2(this.vy, -this.vx);
+        dirRange = Math.abs(this.direction - dir);
+      }
+      if (this.y <= $.edgeSize) {
+        dir = Math.atan2(-this.vy, this.vx);
+        dirRange = $.pi - Math.abs(this.direction - dir + $.pi);
+      }
+      if (this.y >= $.wh - $.edgeSize) {
+        dir = Math.atan2(-this.vy, this.vx);
+        dirRange = $.pi - Math.abs(this.direction - dir - $.pi);
+      }
+
+      dirRange *= 0.2;
+
+      $.particleEmitters.push(
+        new $.ParticleEmitter({
+          x: this.x,
+          y: this.y,
+          count: 3,
+          spawnRange: 0,
+          friction: 0.75,
+          minSpeed: 2 + this.speed * 0.5,
+          maxSpeed: 10 + this.speed * 0.5,
+          minDirection: dir - dirRange,
+          maxDirection: dir + dirRange,
+          hue: this.hue,
+          saturation: this.saturation,
+        })
+      );
+
+      $.audio.play("hit");
+
+      $.explosions.push(
+        new $.Explosion({
+          x: this.x + $.util.rand(-3, 3),
+          y: this.y + $.util.rand(-3, 3),
+          radius: 1 + $.util.rand(1, 10),
+          hue: this.hue,
+          saturation: this.saturation,
+          noAudio: true,
+          tickMax: 10,
+        })
+      );
+    }
     $.bullets.splice(i, 1);
   }
 

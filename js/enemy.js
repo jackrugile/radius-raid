@@ -138,7 +138,7 @@ $.Enemy.prototype.receiveDamage = function (i, val) {
           lightness: 60,
         })
       );
-      $.rumble.level = 4;
+      $.rumble.level = 2;
     }
     this.death();
     $.spawnPowerup(this.x, this.y);

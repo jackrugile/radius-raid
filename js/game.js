@@ -104,6 +104,8 @@ $.init = function () {
   $.healthBarParticleEmitterTickMax = 1;
   $.healthBarParticleEmitterTick = $.healthBarParticleEmitterTickMax;
 
+  $.edgeSize = 50;
+
   $.resizecb();
   $.bindEvents();
   $.setupStates();
@@ -293,7 +295,7 @@ $.renderBackground3 = function () {
 };
 
 $.renderBackground4 = function () {
-  let size = 50;
+  let size = $.edgeSize;
   $.ctxbg4.fillStyle = "hsla(0, 0%, 50%, 0.05)";
   let i = Math.round($.cbg4.height / size);
   while (i--) {
@@ -378,7 +380,7 @@ $.renderInterface = function () {
         width: 110,
         height: 5,
       };
-      $.ctxmg.fillStyle = "hsla(0, 0%, 0%, 0.25)";
+      $.ctxmg.fillStyle = "hsla(0, 0%, 100%, 0.25)";
       $.ctxmg.fillRect(
         powerupBarBack.x,
         powerupBarBack.y,
@@ -545,17 +547,19 @@ $.renderInterface = function () {
     $.healthBarParticleEmitterTick = 0;
     $.particleEmitters.push(
       new $.ParticleEmitter({
-        x: -$.screen.x + healthBar.x + $.hero.life * healthBar.width,
-        y: -$.screen.y + healthBar.y + healthBar.height / 2,
+        x: healthBar.x + $.hero.life * healthBar.width,
+        y: healthBar.y,
         count: 1,
-        spawnRange: 2,
+        spawnRange: 0,
         friction: 0.85,
         minSpeed: 2,
         maxSpeed: 20,
-        minDirection: $.pi / 2 - 0.2,
-        maxDirection: $.pi / 2 + 0.2,
+        minDirection: $.pi / 2 - 0.1,
+        maxDirection: $.pi / 2 + 0.1,
         hue: $.hero.life * 120,
         saturation: 100,
+        offsetScreen: true,
+        offsetRumble: true,
       })
     );
   }
@@ -617,8 +621,8 @@ $.renderInterface = function () {
   if ($.level.kills == $.level.killsToLevel) {
     $.particleEmitters.push(
       new $.ParticleEmitter({
-        x: -$.screen.x + progressBar.x + progressBar.width,
-        y: -$.screen.y + progressBar.y + progressBar.height / 2,
+        x: progressBar.x + progressBar.width,
+        y: progressBar.y,
         count: 30,
         spawnRange: 5,
         friction: 0.95,
@@ -629,6 +633,8 @@ $.renderInterface = function () {
         maxDirection: $.pi / 2 + $.pi / 4,
         hue: 0,
         saturation: 0,
+        offsetScreen: true,
+        offsetRumble: true,
       })
     );
   }
@@ -732,14 +738,11 @@ $.renderMinimap = function () {
         $.minimap.height
       )
     ) {
-      //$.ctxmg.rect( x, y, 2, 2 );
       $.ctxmg.fillStyle =
         "hsl(" + enemy.hue + ", " + enemy.saturation + "%, 50%)";
       $.ctxmg.fillRect(x, y, 2, 2);
     }
   }
-  //$.ctxmg.fillStyle = '#f00';
-  //$.ctxmg.fill();
 
   $.ctxmg.beginPath();
   for (let i = 0; i < $.bullets.length; i++) {
@@ -825,17 +828,15 @@ $.spawnEnemies = function () {
     if ($.levelDiffOffset > 0) {
       timeCheck = Math.max(1, timeCheck - $.levelDiffOffset * 2);
     }
-
     let timeDiff = Date.now() - $.level.distribution[i].lastSpawn;
     let timeCheckNormalized = timeCheck * (1000 / 60);
     let timeOverflow = Math.min(
       timeCheckNormalized,
       timeDiff - timeCheckNormalized
     );
-
     if (timeDiff >= timeCheckNormalized) {
       $.level.distribution[i].lastSpawn = Date.now() - timeOverflow;
-      $.enemies.push($.spawnEnemy(10));
+      $.enemies.push($.spawnEnemy(i));
     }
   }
 };
@@ -963,9 +964,7 @@ $.updateDelta = function () {
 };
 
 $.updateScreen = function () {
-  let xSnap = 0;
   let xModify = 0.5;
-  let ySnap = 0;
   let yModify = 0.5;
 
   if ($.hero.x < $.cw / 2) {
@@ -980,19 +979,10 @@ $.updateScreen = function () {
     yModify = 1 - ($.wh - $.hero.y) / $.ch;
   }
 
-  // this.vy += (0 - this.vy) * (1 - Math.exp(-0.1 * $.dt));
-
-  xSnap = ($.cw * xModify - $.hero.x - $.screen.x) / 30;
-  ySnap = ($.ch * yModify - $.hero.y - $.screen.y) / 30;
-
-  // ease to new coordinates
-  $.screen.x += xSnap * $.dt;
-  $.screen.y += ySnap * $.dt;
-
-  // $.screen.x +=
-  //   ($.cw * xModify - $.hero.x - $.screen.x) * (1 - Math.exp(-0.1 * $.dt));
-  // $.screen.y +=
-  //   ($.cy * yModify - $.hero.y - $.screen.y) * (1 - Math.exp(-0.1 * $.dt));
+  $.screen.x +=
+    ($.cw * xModify - $.hero.x - $.screen.x) * (1 - Math.exp(-0.05 * $.dt));
+  $.screen.y +=
+    ($.ch * yModify - $.hero.y - $.screen.y) * (1 - Math.exp(-0.05 * $.dt));
 
   // update rumble levels, keep X and Y changes consistent, apply rumble
   $.rumble.x = 0;
@@ -1005,55 +995,22 @@ $.updateScreen = function () {
     $.rumble.y = $.util.rand(-$.rumble.level, $.rumble.level);
   }
 
-  // animate background canvas
-  $.cbg1.style.marginLeft =
-    -(($.cbg1.width - $.cw) / 2) - // half the difference from bg to viewport
-    (($.cbg1.width - $.cw) / 2) * // half the diff again, modified by a percentage below
-      ((-$.screen.x - ($.ww - $.cw) / 2) / (($.ww - $.cw) / 2)) - // viewport offset applied to bg
-    $.rumble.x +
-    "px";
-  $.cbg1.style.marginTop =
-    -(($.cbg1.height - $.ch) / 2) -
-    (($.cbg1.height - $.ch) / 2) *
-      ((-$.screen.y - ($.wh - $.ch) / 2) / (($.wh - $.ch) / 2)) -
-    $.rumble.y +
-    "px";
-  $.cbg2.style.marginLeft =
-    -(($.cbg2.width - $.cw) / 2) - // half the difference from bg to viewport
-    (($.cbg2.width - $.cw) / 2) * // half the diff again, modified by a percentage below
-      ((-$.screen.x - ($.ww - $.cw) / 2) / (($.ww - $.cw) / 2)) - // viewport offset applied to bg
-    $.rumble.x +
-    "px";
-  $.cbg2.style.marginTop =
-    -(($.cbg2.height - $.ch) / 2) -
-    (($.cbg2.height - $.ch) / 2) *
-      ((-$.screen.y - ($.wh - $.ch) / 2) / (($.wh - $.ch) / 2)) -
-    $.rumble.y +
-    "px";
-  $.cbg3.style.marginLeft =
-    -(($.cbg3.width - $.cw) / 2) - // half the difference from bg to viewport
-    (($.cbg3.width - $.cw) / 2) * // half the diff again, modified by a percentage below
-      ((-$.screen.x - ($.ww - $.cw) / 2) / (($.ww - $.cw) / 2)) - // viewport offset applied to bg
-    $.rumble.x +
-    "px";
-  $.cbg3.style.marginTop =
-    -(($.cbg3.height - $.ch) / 2) -
-    (($.cbg3.height - $.ch) / 2) *
-      ((-$.screen.y - ($.wh - $.ch) / 2) / (($.wh - $.ch) / 2)) -
-    $.rumble.y +
-    "px";
-  $.cbg4.style.marginLeft =
-    -(($.cbg4.width - $.cw) / 2) - // half the difference from bg to viewport
-    (($.cbg4.width - $.cw) / 2) * // half the diff again, modified by a percentage below
-      ((-$.screen.x - ($.ww - $.cw) / 2) / (($.ww - $.cw) / 2)) - // viewport offset applied to bg
-    $.rumble.x +
-    "px";
-  $.cbg4.style.marginTop =
-    -(($.cbg4.height - $.ch) / 2) -
-    (($.cbg4.height - $.ch) / 2) *
-      ((-$.screen.y - ($.wh - $.ch) / 2) / (($.wh - $.ch) / 2)) -
-    $.rumble.y +
-    "px";
+  // animate background canvases
+  let bgs = [$.cbg1, $.cbg2, $.cbg3, $.cbg4];
+  for (let i = 0; i < bgs.length; i++) {
+    let bg = bgs[i];
+    bg.style.transform = `translate3d(${
+      -((bg.width - $.cw) / 2) - // half the difference from bg to viewport
+      ((bg.width - $.cw) / 2) * // half the diff again, modified by a percentage below
+        ((-$.screen.x - ($.ww - $.cw) / 2) / (($.ww - $.cw) / 2)) - // viewport offset applied to bg
+      $.rumble.x
+    }px, ${
+      -((bg.height - $.ch) / 2) -
+      ((bg.height - $.ch) / 2) *
+        ((-$.screen.y - ($.wh - $.ch) / 2) / (($.wh - $.ch) / 2)) -
+      $.rumble.y
+    }px, 0)`;
+  }
 
   $.mousescreen();
 };
@@ -1632,6 +1589,22 @@ $.setupStates = function () {
     while (i--) {
       $.enemies[i].render(i);
     }
+
+    $.ctxmg.strokeStyle = `hsla(0, 0%, 0%, 0.75)`;
+    $.ctxmg.lineWidth = $.edgeSize * 2;
+    $.ctxmg.strokeRect(0, 0, $.ww, $.wh);
+
+    $.ctxmg.strokeStyle = `hsla(0, 0%, 100%, ${
+      0.5 + Math.sin($.tick * 0.1) * 0.25
+    })`;
+    $.ctxmg.lineWidth = 1;
+    $.ctxmg.strokeRect(
+      $.edgeSize + 0.5,
+      $.edgeSize + 0.5,
+      $.ww - $.edgeSize * 2 - 1,
+      $.wh - $.edgeSize * 2 - 1
+    );
+
     i = $.explosions.length;
     while (i--) {
       $.explosions[i].render(i);
@@ -1653,6 +1626,7 @@ $.setupStates = function () {
       $.bullets[i].render(i);
     }
     $.hero.render();
+
     $.ctxmg.restore();
     i = $.levelPops.length;
     while (i--) {

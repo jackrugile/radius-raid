@@ -6,16 +6,13 @@ $.TextPop = function (opt) {
     this[k] = opt[k];
   }
   this.alpha = 2;
-  this.vy = 0;
 };
 
 /*==============================================================================
 Update
 ==============================================================================*/
 $.TextPop.prototype.update = function (i) {
-  this.vy -= 0.05 * $.dt;
-  this.y += this.vy * $.dt;
-  this.alpha -= 0.03 * $.dt;
+  this.alpha -= 0.06 * $.dt;
 
   if (this.alpha <= 0) {
     $.textPops.splice(i, 1);
@@ -31,7 +28,7 @@ $.TextPop.prototype.render = function (i) {
     ctx: $.ctxmg,
     x: this.x,
     y: this.y,
-    text: "+" + this.value,
+    text: "" + this.value,
     hspacing: 1,
     vspacing: 0,
     halign: "center",

@@ -28,6 +28,8 @@ $.Powerup = function (opt) {
   this.vy = 0;
   this.direction = $.util.rand(0, $.tau);
   this.speed = $.util.rand(0.5, 2);
+
+  this.spawnTime = Date.now();
 };
 
 /*==============================================================================
@@ -45,14 +47,14 @@ $.Powerup.prototype.update = function (i) {
   /*==============================================================================
   Check Bounds
   ==============================================================================*/
-  if (this.x <= 0 || this.x + this.width >= $.ww) {
-    this.x = Math.min(this.x, $.ww - this.width);
-    this.x = Math.max(this.x, 0);
+  if (this.x <= $.edgeSize || this.x >= $.ww - this.width - $.edgeSize) {
+    this.x = Math.min(this.x, $.ww - this.width - $.edgeSize);
+    this.x = Math.max(this.x, $.edgeSize);
     this.direction = Math.atan2(this.vy, -this.vx);
   }
-  if (this.y <= 0 || this.y + this.height >= $.wh) {
-    this.y = Math.min(this.y, $.wh - this.height);
-    this.y = Math.max(this.y, 0);
+  if (this.y <= $.edgeSize || this.y >= $.wh - this.height - $.edgeSize) {
+    this.y = Math.min(this.y, $.wh - this.height - $.edgeSize);
+    this.y = Math.max(this.y, $.edgeSize);
     this.direction = Math.atan2(-this.vy, this.vx);
   }
 
@@ -99,7 +101,16 @@ Render
 $.Powerup.prototype.render = function (i) {
   $.ctxmg.fillStyle = "#000";
   $.ctxmg.fillRect(this.x - 2, this.y - 2, this.width + 4, this.height + 4);
-  $.ctxmg.fillStyle = "#555";
+  $.ctxmg.fillStyle =
+    "hsla(" +
+    this.hue +
+    ", " +
+    this.saturation +
+    "%, " +
+    this.lightness +
+    "%, " +
+    (0.7 + Math.sin(this.spawnTime + $.tick * 0.2) * 0.3) +
+    ")";
   $.ctxmg.fillRect(this.x - 1, this.y - 1, this.width + 2, this.height + 2);
 
   $.ctxmg.fillStyle = "#111";

@@ -22,6 +22,8 @@ $.ParticleEmitter = function (opt) {
         lineWidth: $.util.rand(0.5, 1.5),
         hue: this.hue,
         saturation: this.saturation,
+        offsetScreen: this.offsetScreen,
+        offsetRumble: this.offsetRumble,
       })
     );
   }

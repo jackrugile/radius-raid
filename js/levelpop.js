@@ -24,7 +24,6 @@ $.LevelPop.prototype.update = function (i) {
   } else {
     this.tick += $.dt;
   }
-  this.tick += $.dt;
 };
 
 /*==============================================================================
@@ -45,6 +44,7 @@ $.LevelPop.prototype.render = function (i) {
     snap: 1,
     render: 1,
   });
+
   let alpha = this.baseAlpha;
   if (this.tick < this.tickMax * 0.25) {
     alpha = (this.tick / (this.tickMax * 0.25)) * this.baseAlpha;

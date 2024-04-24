@@ -6,10 +6,10 @@ $.Explosion = function (opt) {
     this[k] = opt[k];
   }
   this.tick = 0;
-  this.tickMax = 30;
+  this.tickMax = this.tickMax ? this.tickMax : 30;
   if ($.slow) {
     $.audio.play("explosionAlt");
-  } else {
+  } else if (!this.noAudio) {
     $.audio.play("explosion");
   }
 };

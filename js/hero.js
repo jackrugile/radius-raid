@@ -29,7 +29,12 @@ $.Hero = function () {
       damage: 1,
       speed: 10,
       piercing: 0,
-      strokeStyle: "#fff",
+      color: {
+        hue: 0,
+        saturation: 0,
+        lightness: 100,
+        value: "hsl(0, 0%, 100%)",
+      },
     },
     fireFlag: 0,
   };
@@ -79,17 +84,22 @@ $.Hero.prototype.update = function () {
   /*==============================================================================
   Lock Bounds
   ==============================================================================*/
-  if (this.x >= $.ww - this.radius) {
-    this.x = $.ww - this.radius;
+  let buffer = 5;
+  if (this.x >= $.ww - this.radius - $.edgeSize - buffer) {
+    this.x = $.ww - this.radius - $.edgeSize - buffer;
+    this.vx = 0;
   }
-  if (this.x <= this.radius) {
-    this.x = this.radius;
+  if (this.x <= this.radius + $.edgeSize + buffer) {
+    this.x = this.radius + $.edgeSize + buffer;
+    this.vx = 0;
   }
-  if (this.y >= $.wh - this.radius) {
-    this.y = $.wh - this.radius;
+  if (this.y >= $.wh - this.radius - $.edgeSize - buffer) {
+    this.y = $.wh - this.radius - $.edgeSize - buffer;
+    this.vy = 0;
   }
-  if (this.y <= this.radius) {
-    this.y = this.radius;
+  if (this.y <= this.radius + $.edgeSize + buffer) {
+    this.y = this.radius + $.edgeSize + buffer;
+    this.vy = 0;
   }
 
   /*==============================================================================
@@ -99,9 +109,6 @@ $.Hero.prototype.update = function () {
   let dy = $.mouse.y - this.y;
   this.direction = Math.atan2(dy, dx);
   if ($.mouse.down) {
-    // this.vx += Math.cos(this.direction) * -0.1 * $.dt;
-    // this.vy += Math.sin(this.direction) * -0.1 * $.dt;
-
     this.vx += (0 - this.vx) * (1 - Math.exp(-0.15 * $.dt));
     this.vy += (0 - this.vy) * (1 - Math.exp(-0.15 * $.dt));
   }
@@ -134,16 +141,12 @@ $.Hero.prototype.update = function () {
         spreadStep = this.weapon.spread / (this.weapon.count - 1);
       }
 
-      let gunX =
-        this.x +
-        Math.cos(this.direction) * (this.radius + this.weapon.bullet.size);
-      let gunY =
-        this.y +
-        Math.sin(this.direction) * (this.radius + this.weapon.bullet.size);
+      let gunX = this.x + Math.cos(this.direction) * this.radius;
+      let gunY = this.y + Math.sin(this.direction) * this.radius;
 
       for (let i = 0; i < this.weapon.count; i++) {
         $.bulletsFired++;
-        let color = this.weapon.bullet.strokeStyle;
+        let color = this.weapon.bullet.color;
         if (
           $.powerupTimers[2] > 0 ||
           $.powerupTimers[3] > 0 ||
@@ -151,37 +154,49 @@ $.Hero.prototype.update = function () {
         ) {
           let colors = [];
           if ($.powerupTimers[2] > 0) {
-            colors.push(
-              "hsl(" +
+            colors.push({
+              hue: $.definitions.powerups[2].hue,
+              saturation: $.definitions.powerups[2].saturation,
+              lightness: $.definitions.powerups[2].lightness,
+              value:
+                "hsl(" +
                 $.definitions.powerups[2].hue +
                 ", " +
                 $.definitions.powerups[2].saturation +
                 "%, " +
                 $.definitions.powerups[2].lightness +
-                "%)"
-            );
+                "%)",
+            });
           }
           if ($.powerupTimers[3] > 0) {
-            colors.push(
-              "hsl(" +
+            colors.push({
+              hue: $.definitions.powerups[3].hue,
+              saturation: $.definitions.powerups[3].saturation,
+              lightness: $.definitions.powerups[3].lightness,
+              value:
+                "hsl(" +
                 $.definitions.powerups[3].hue +
                 ", " +
                 $.definitions.powerups[3].saturation +
                 "%, " +
                 $.definitions.powerups[3].lightness +
-                "%)"
-            );
+                "%)",
+            });
           }
           if ($.powerupTimers[4] > 0) {
-            colors.push(
-              "hsl(" +
+            colors.push({
+              hue: $.definitions.powerups[4].hue,
+              saturation: $.definitions.powerups[4].saturation,
+              lightness: $.definitions.powerups[4].lightness,
+              value:
+                "hsl(" +
                 $.definitions.powerups[4].hue +
                 ", " +
                 $.definitions.powerups[4].saturation +
                 "%, " +
                 $.definitions.powerups[4].lightness +
-                "%)"
-            );
+                "%)",
+            });
           }
           color = colors[Math.floor($.util.rand(0, colors.length))];
         }
@@ -194,7 +209,10 @@ $.Hero.prototype.update = function () {
             damage: this.weapon.bullet.damage,
             size: this.weapon.bullet.size,
             lineWidth: this.weapon.bullet.lineWidth,
-            strokeStyle: color,
+            strokeStyle: color.value,
+            hue: color.hue,
+            saturation: color.saturation,
+            lightness: color.lightness,
             piercing: this.weapon.bullet.piercing,
           })
         );
@@ -228,9 +246,9 @@ $.Hero.prototype.update = function () {
   }
 
   if (this.takingDamage) {
-    $.rumble.level = 6;
+    $.rumble.level = 4;
 
-    //this.life -= 0.0075;
+    this.life -= 0.0075 * $.dt;
 
     if (this.particleEmitterTick >= this.particleEmitterTickMax) {
       this.particleEmitterTick = 0;
@@ -268,18 +286,13 @@ $.Hero.prototype.render = function () {
 
     if (this.takingDamage) {
       fillStyle = "hsla(0, 0%, " + $.util.rand(0, 100) + "%, 1)";
-      $.ctxmg.fillStyle =
-        "hsla(0, 0%, " +
-        $.util.rand(0, 100) +
-        "%, " +
-        $.util.rand(0.01, 0.15) +
-        ")";
+      $.ctxmg.fillStyle = "hsla(0, 100%, 50%, " + $.util.rand(0.05, 0.2) + ")";
       $.ctxmg.fillRect(-$.screen.x, -$.screen.y, $.cw, $.ch);
     } else if (this.weapon.fireFlag > 0) {
       this.weapon.fireFlag -= $.dt;
       fillStyle =
         "hsla(" +
-        $.util.rand(0, 359) +
+        $.util.rand(0, 360) +
         ", 100%, " +
         $.util.rand(20, 80) +
         "%, 1)";
@@ -318,7 +331,7 @@ $.Hero.prototype.render = function () {
       $.ctxmg.arc(
         this.x,
         this.y,
-        this.radius * 2.5 + Math.sin($.tick * sinMult) * radiusMult,
+        this.radius * 2 + Math.sin($.tick * sinMult) * radiusMult,
         this.direction - spread,
         this.direction + spread,
         false
