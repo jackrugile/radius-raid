@@ -16,8 +16,8 @@ $.util.rand = function (min, max) {
 Calculations
 ==============================================================================*/
 $.util.distance = function (p1x, p1y, p2x, p2y) {
-  var xDistance = p1x - p2x,
-    yDistance = p1y - p2y;
+  let xDistance = p1x - p2x;
+  let yDistance = p1y - p2y;
   return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
 };
 
@@ -56,7 +56,7 @@ $.util.pointInRect = function (px, py, rx, ry, rw, rh) {
 Shapes
 ==============================================================================*/
 $.util.circle = function (ctx, x, y, radius) {
-  var radius = radius <= 0 ? 1 : radius;
+  radius = radius <= 0 ? 1 : radius;
   ctx.beginPath();
   ctx.arc(x, y, radius, 0, $.twopi, false);
 };
@@ -88,14 +88,14 @@ $.util.pad = function (amount, digits) {
 };
 
 $.util.convertTime = function (seconds) {
-  var minutes = Math.floor(seconds / 60);
-  var seconds = Math.floor(seconds % 60);
+  let minutes = Math.floor(seconds / 60);
+  seconds = Math.floor(seconds % 60);
   return $.util.pad(minutes, 2) + ":" + $.util.pad(seconds, 2);
 };
 
 $.util.commas = function (nStr) {
   nStr += "";
-  var x = nStr.split("."),
+  let x = nStr.split("."),
     x1 = x[0],
     x2 = x.length > 1 ? "." + x[1] : "",
     rgx = /(\d+)(\d{3})/;

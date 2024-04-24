@@ -2,10 +2,10 @@
 Init
 ==============================================================================*/
 $.Button = function (opt) {
-  for (var k in opt) {
+  for (let k in opt) {
     this[k] = opt[k];
   }
-  var text = $.text({
+  let text = $.text({
     ctx: $.ctxmg,
     x: 0,
     y: 0,

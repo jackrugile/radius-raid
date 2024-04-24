@@ -2,7 +2,7 @@
 Init
 ==============================================================================*/
 $.Particle = function (opt) {
-  for (var k in opt) {
+  for (let k in opt) {
     this[k] = opt[k];
   }
 };

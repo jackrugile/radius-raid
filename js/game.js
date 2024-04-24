@@ -169,7 +169,7 @@ $.reset = function () {
   $.levelPops.length = 0;
   $.powerupTimers.length = 0;
 
-  for (var i = 0; i < $.definitions.powerups.length; i++) {
+  for (let i = 0; i < $.definitions.powerups.length; i++) {
     $.powerupTimers.push(0);
   }
 
@@ -230,7 +230,7 @@ $.renderFavicon = function () {
 Render Backgrounds
 ==============================================================================*/
 $.renderBackground1 = function () {
-  var gradient = $.ctxbg1.createRadialGradient(
+  let gradient = $.ctxbg1.createRadialGradient(
     $.cbg1.width / 2,
     $.cbg1.height / 2,
     0,
@@ -243,7 +243,7 @@ $.renderBackground1 = function () {
   $.ctxbg1.fillStyle = gradient;
   $.ctxbg1.fillRect(0, 0, $.cbg1.width, $.cbg1.height);
 
-  var i = 2000;
+  let i = 2000;
   while (i--) {
     $.util.fillCircle(
       $.ctxbg1,
@@ -254,8 +254,8 @@ $.renderBackground1 = function () {
     );
   }
 
-  var i = 800;
-  while (i--) {
+  let j = 800;
+  while (j--) {
     $.util.fillCircle(
       $.ctxbg1,
       $.util.rand(0, $.cbg1.width),
@@ -267,7 +267,7 @@ $.renderBackground1 = function () {
 };
 
 $.renderBackground2 = function () {
-  var i = 80;
+  let i = 80;
   while (i--) {
     $.util.fillCircle(
       $.ctxbg2,
@@ -280,7 +280,7 @@ $.renderBackground2 = function () {
 };
 
 $.renderBackground3 = function () {
-  var i = 40;
+  let i = 40;
   while (i--) {
     $.util.fillCircle(
       $.ctxbg3,
@@ -293,9 +293,9 @@ $.renderBackground3 = function () {
 };
 
 $.renderBackground4 = function () {
-  var size = 50;
+  let size = 50;
   $.ctxbg4.fillStyle = "hsla(0, 0%, 50%, 0.05)";
-  var i = Math.round($.cbg4.height / size);
+  let i = Math.round($.cbg4.height / size);
   while (i--) {
     $.ctxbg4.fillRect(0, i * size + 25, $.cbg4.width, 1);
   }
@@ -309,7 +309,7 @@ $.renderBackground4 = function () {
 Render Foreground
 ==============================================================================*/
 $.renderForeground = function () {
-  var gradient = $.ctxfg.createRadialGradient(
+  let gradient = $.ctxfg.createRadialGradient(
     $.cw / 2,
     $.ch / 2,
     $.ch / 3,
@@ -323,12 +323,12 @@ $.renderForeground = function () {
   $.ctxfg.fillRect(0, 0, $.cw, $.ch);
 
   $.ctxfg.fillStyle = "hsla(0, 0%, 50%, 0.1)";
-  var i = Math.round($.ch / 2);
+  let i = Math.round($.ch / 2);
   while (i--) {
     $.ctxfg.fillRect(0, i * 2, $.cw, 1);
   }
 
-  var gradient2 = $.ctxfg.createLinearGradient($.cw, 0, 0, $.ch);
+  let gradient2 = $.ctxfg.createLinearGradient($.cw, 0, 0, $.ch);
   gradient2.addColorStop(0, "hsla(0, 0%, 100%, 0.04)");
   gradient2.addColorStop(0.75, "hsla(0, 0%, 100%, 0)");
   $.ctxfg.beginPath();
@@ -348,11 +348,11 @@ $.renderInterface = function () {
   /*==============================================================================
   Powerup Timers
   ==============================================================================*/
-  for (var i = 0; i < $.definitions.powerups.length; i++) {
-    var powerup = $.definitions.powerups[i],
-      powerupOn = $.powerupTimers[i] > 0;
+  for (let i = 0; i < $.definitions.powerups.length; i++) {
+    let powerup = $.definitions.powerups[i];
+    let powerupOn = $.powerupTimers[i] > 0;
     $.ctxmg.beginPath();
-    var powerupText = $.text({
+    let powerupText = $.text({
       ctx: $.ctxmg,
       x: $.minimap.x + $.minimap.width + 90,
       y: $.minimap.y + 4 + i * 12,
@@ -427,18 +427,17 @@ $.renderInterface = function () {
       snap: 1,
       render: 1,
     });
+    let alpha = 0.5;
     if ($.instructionTick < $.instructionTickMax * 0.25) {
-      var alpha = ($.instructionTick / ($.instructionTickMax * 0.25)) * 0.5;
+      alpha = ($.instructionTick / ($.instructionTickMax * 0.25)) * 0.5;
     } else if (
       $.instructionTick >
       $.instructionTickMax - $.instructionTickMax * 0.25
     ) {
-      var alpha =
+      alpha =
         (($.instructionTickMax - $.instructionTick) /
           ($.instructionTickMax * 0.25)) *
         0.5;
-    } else {
-      var alpha = 0.5;
     }
     alpha = Math.min(1, Math.max(0, alpha));
 
@@ -459,18 +458,17 @@ $.renderInterface = function () {
       snap: 1,
       render: 1,
     });
+    alpha = 1;
     if ($.instructionTick < $.instructionTickMax * 0.25) {
-      var alpha = ($.instructionTick / ($.instructionTickMax * 0.25)) * 1;
+      alpha = ($.instructionTick / ($.instructionTickMax * 0.25)) * 1;
     } else if (
       $.instructionTick >
       $.instructionTickMax - $.instructionTickMax * 0.25
     ) {
-      var alpha =
+      alpha =
         (($.instructionTickMax - $.instructionTick) /
           ($.instructionTickMax * 0.25)) *
         1;
-    } else {
-      var alpha = 1;
     }
     alpha = Math.min(1, Math.max(0, alpha));
 
@@ -490,7 +488,7 @@ $.renderInterface = function () {
   Health
   ==============================================================================*/
   $.ctxmg.beginPath();
-  var healthText = $.text({
+  let healthText = $.text({
     ctx: $.ctxmg,
     x: 20,
     y: 20,
@@ -505,7 +503,7 @@ $.renderInterface = function () {
   });
   $.ctxmg.fillStyle = "hsla(0, 0%, 100%, 0.5)";
   $.ctxmg.fill();
-  var healthBar = {
+  let healthBar = {
     x: healthText.ex + 10,
     y: healthText.sy,
     width: 110,
@@ -566,7 +564,7 @@ $.renderInterface = function () {
   Progress
   ==============================================================================*/
   $.ctxmg.beginPath();
-  var progressText = $.text({
+  let progressText = $.text({
     ctx: $.ctxmg,
     x: healthBar.x + healthBar.width + 30,
     y: 20,
@@ -581,7 +579,7 @@ $.renderInterface = function () {
   });
   $.ctxmg.fillStyle = "hsla(0, 0%, 100%, 0.5)";
   $.ctxmg.fill();
-  var progressBar = {
+  let progressBar = {
     x: progressText.ex + 10,
     y: progressText.sy,
     width: healthBar.width,
@@ -639,7 +637,7 @@ $.renderInterface = function () {
   Score
   ==============================================================================*/
   $.ctxmg.beginPath();
-  var scoreLabel = $.text({
+  let scoreLabel = $.text({
     ctx: $.ctxmg,
     x: progressBar.x + progressBar.width + 30,
     y: 20,
@@ -656,7 +654,7 @@ $.renderInterface = function () {
   $.ctxmg.fill();
 
   $.ctxmg.beginPath();
-  var scoreText = $.text({
+  let scoreText = $.text({
     ctx: $.ctxmg,
     x: scoreLabel.ex + 10,
     y: 20,
@@ -673,7 +671,7 @@ $.renderInterface = function () {
   $.ctxmg.fill();
 
   $.ctxmg.beginPath();
-  var bestLabel = $.text({
+  let bestLabel = $.text({
     ctx: $.ctxmg,
     x: scoreText.ex + 30,
     y: 20,
@@ -690,7 +688,7 @@ $.renderInterface = function () {
   $.ctxmg.fill();
 
   $.ctxmg.beginPath();
-  var bestText = $.text({
+  let bestText = $.text({
     ctx: $.ctxmg,
     x: bestLabel.ex + 10,
     y: 20,
@@ -720,10 +718,10 @@ $.renderMinimap = function () {
   );
 
   //$.ctxmg.beginPath();
-  for (var i = 0; i < $.enemies.length; i++) {
-    var enemy = $.enemies[i],
-      x = $.minimap.x + Math.floor(enemy.x * $.minimap.scale),
-      y = $.minimap.y + Math.floor(enemy.y * $.minimap.scale);
+  for (let i = 0; i < $.enemies.length; i++) {
+    let enemy = $.enemies[i];
+    let x = $.minimap.x + Math.floor(enemy.x * $.minimap.scale);
+    let y = $.minimap.y + Math.floor(enemy.y * $.minimap.scale);
     if (
       $.util.pointInRect(
         x + 1,
@@ -744,10 +742,10 @@ $.renderMinimap = function () {
   //$.ctxmg.fill();
 
   $.ctxmg.beginPath();
-  for (var i = 0; i < $.bullets.length; i++) {
-    var bullet = $.bullets[i],
-      x = $.minimap.x + Math.floor(bullet.x * $.minimap.scale),
-      y = $.minimap.y + Math.floor(bullet.y * $.minimap.scale);
+  for (let i = 0; i < $.bullets.length; i++) {
+    let bullet = $.bullets[i];
+    let x = $.minimap.x + Math.floor(bullet.x * $.minimap.scale);
+    let y = $.minimap.y + Math.floor(bullet.y * $.minimap.scale);
     if (
       $.util.pointInRect(
         x,
@@ -785,10 +783,10 @@ $.renderMinimap = function () {
 Enemy Spawning
 ==============================================================================*/
 $.getSpawnCoordinates = function (radius) {
-  var quadrant = Math.floor($.util.rand(0, 4)),
-    x,
-    y,
-    start;
+  let quadrant = Math.floor($.util.rand(0, 4));
+  let x;
+  let y;
+  let start;
 
   if (quadrant === 0) {
     x = $.util.rand(0, $.ww);
@@ -812,8 +810,8 @@ $.getSpawnCoordinates = function (radius) {
 };
 
 $.spawnEnemy = function (type) {
-  var params = $.definitions.enemies[type],
-    coordinates = $.getSpawnCoordinates(params.radius);
+  let params = $.definitions.enemies[type];
+  let coordinates = $.getSpawnCoordinates(params.radius);
   params.x = coordinates.x;
   params.y = coordinates.y;
   params.start = coordinates.start;
@@ -822,8 +820,8 @@ $.spawnEnemy = function (type) {
 };
 
 $.spawnEnemies = function () {
-  for (var i = 0; i < $.level.distributionCount; i++) {
-    var timeCheck = $.level.distribution[i].time;
+  for (let i = 0; i < $.level.distributionCount; i++) {
+    let timeCheck = $.level.distribution[i].time;
     if ($.levelDiffOffset > 0) {
       timeCheck = Math.max(1, timeCheck - $.levelDiffOffset * 2);
     }
@@ -870,7 +868,7 @@ $.mouseupcb = function (e) {
 };
 
 $.keydowncb = function (e) {
-  var e = e.keyCode ? e.keyCode : e.which;
+  e = e.keyCode ? e.keyCode : e.which;
   if (e === 38 || e === 87) {
     $.keys.state.up = 1;
   }
@@ -895,7 +893,7 @@ $.keydowncb = function (e) {
 };
 
 $.keyupcb = function (e) {
-  var e = e.keyCode ? e.keyCode : e.which;
+  e = e.keyCode ? e.keyCode : e.which;
   if (e === 38 || e === 87) {
     $.keys.state.up = 0;
   }
@@ -920,7 +918,7 @@ $.keyupcb = function (e) {
 };
 
 $.resizecb = function (e) {
-  var rect = $.cmg.getBoundingClientRect();
+  let rect = $.cmg.getBoundingClientRect();
   $.cOffset = {
     left: rect.left,
     top: rect.top,
@@ -951,7 +949,7 @@ $.clearScreen = function () {
 };
 
 $.updateDelta = function () {
-  var now = Date.now();
+  let now = Date.now();
   $.dt = (now - $.lt) / (1000 / 60);
   $.dt = $.dt < 0 ? 0.001 : $.dt;
   $.dt = $.dt > 10 ? 10 : $.dt;
@@ -960,22 +958,21 @@ $.updateDelta = function () {
 };
 
 $.updateScreen = function () {
-  var xSnap, xModify, ySnap, yModify;
+  let xSnap = 0;
+  let xModify = 0.5;
+  let ySnap = 0;
+  let yModify = 0.5;
 
   if ($.hero.x < $.cw / 2) {
     xModify = $.hero.x / $.cw;
   } else if ($.hero.x > $.ww - $.cw / 2) {
     xModify = 1 - ($.ww - $.hero.x) / $.cw;
-  } else {
-    xModify = 0.5;
   }
 
   if ($.hero.y < $.ch / 2) {
     yModify = $.hero.y / $.ch;
   } else if ($.hero.y > $.wh - $.ch / 2) {
     yModify = 1 - ($.wh - $.hero.y) / $.ch;
-  } else {
-    yModify = 0.5;
   }
 
   // this.vy += (0 - this.vy) * (1 - Math.exp(-0.1 * $.dt));
@@ -1071,7 +1068,7 @@ $.updateLevel = function () {
       $.level.current++;
       $.level.kills = 0;
       // no more level definitions, so take the last level and increase the spawn rate slightly
-      //for( var i = 0; i < $.level.distributionCount; i++ ) {
+      //for( let i = 0; i < $.level.distributionCount; i++ ) {
       //$.level.distribution[ i ] = Math.max( 1, $.level.distribution[ i ] - 5 );
       //}
     }
@@ -1133,9 +1130,9 @@ $.updatePowerupTimers = function () {
 
 $.spawnPowerup = function (x, y) {
   if (Math.random() < 0.1) {
-    var min = $.hero.life < 0.9 ? 0 : 1,
-      type = Math.floor($.util.rand(min, $.definitions.powerups.length)),
-      params = $.definitions.powerups[type];
+    let min = $.hero.life < 0.9 ? 0 : 1;
+    let type = Math.floor($.util.rand(min, $.definitions.powerups.length));
+    let params = $.definitions.powerups[type];
     params.type = type;
     params.x = x;
     params.y = y;
@@ -1157,7 +1154,7 @@ $.setState = function (state) {
 
     $.reset();
 
-    var playButton = new $.Button({
+    let playButton = new $.Button({
       x: $.cw / 2 + 1,
       y: $.ch / 2 - 24,
       lockedWidth: 299,
@@ -1172,7 +1169,7 @@ $.setState = function (state) {
     });
     $.buttons.push(playButton);
 
-    var statsButton = new $.Button({
+    let statsButton = new $.Button({
       x: $.cw / 2 + 1,
       y: playButton.ey + 25,
       lockedWidth: 299,
@@ -1185,7 +1182,7 @@ $.setState = function (state) {
     });
     $.buttons.push(statsButton);
 
-    var creditsButton = new $.Button({
+    let creditsButton = new $.Button({
       x: $.cw / 2 + 1,
       y: statsButton.ey + 26,
       lockedWidth: 299,
@@ -1202,7 +1199,7 @@ $.setState = function (state) {
   if (state == "stats") {
     $.mouse.down = 0;
 
-    var clearButton = new $.Button({
+    let clearButton = new $.Button({
       x: $.cw / 2 + 1,
       y: 426,
       lockedWidth: 299,
@@ -1223,7 +1220,7 @@ $.setState = function (state) {
     });
     $.buttons.push(clearButton);
 
-    var menuButton = new $.Button({
+    let menuButton = new $.Button({
       x: $.cw / 2 + 1,
       y: clearButton.ey + 25,
       lockedWidth: 299,
@@ -1240,7 +1237,7 @@ $.setState = function (state) {
   if (state == "credits") {
     $.mouse.down = 0;
 
-    var js13kButton = new $.Button({
+    let js13kButton = new $.Button({
       x: $.cw / 2 + 1,
       y: 476,
       lockedWidth: 299,
@@ -1254,7 +1251,7 @@ $.setState = function (state) {
     });
     $.buttons.push(js13kButton);
 
-    var menuButton = new $.Button({
+    let menuButton = new $.Button({
       x: $.cw / 2 + 1,
       y: js13kButton.ey + 25,
       lockedWidth: 299,
@@ -1272,7 +1269,7 @@ $.setState = function (state) {
     $.pt = Date.now();
     $.mouse.down = 0;
     $.screenshot = $.ctxmg.getImageData(0, 0, $.cw, $.ch);
-    var resumeButton = new $.Button({
+    let resumeButton = new $.Button({
       x: $.cw / 2 + 1,
       y: $.ch / 2 + 26,
       lockedWidth: 299,
@@ -1286,7 +1283,7 @@ $.setState = function (state) {
     });
     $.buttons.push(resumeButton);
 
-    var menuButton = new $.Button({
+    let menuButton = new $.Button({
       x: $.cw / 2 + 1,
       y: resumeButton.ey + 25,
       lockedWidth: 299,
@@ -1322,7 +1319,7 @@ $.setState = function (state) {
     $.mouse.down = 0;
 
     $.screenshot = $.ctxmg.getImageData(0, 0, $.cw, $.ch);
-    var resumeButton = new $.Button({
+    let resumeButton = new $.Button({
       x: $.cw / 2 + 1,
       y: 426,
       lockedWidth: 299,
@@ -1337,7 +1334,7 @@ $.setState = function (state) {
     });
     $.buttons.push(resumeButton);
 
-    var menuButton = new $.Button({
+    let menuButton = new $.Button({
       x: $.cw / 2 + 1,
       y: resumeButton.ey + 25,
       lockedWidth: 299,
@@ -1369,7 +1366,7 @@ $.setupStates = function () {
     $.clearScreen();
     $.updateScreen();
 
-    var i = $.buttons.length;
+    let i = $.buttons.length;
     while (i--) {
       $.buttons[i].update(i);
     }
@@ -1379,7 +1376,7 @@ $.setupStates = function () {
     }
 
     $.ctxmg.beginPath();
-    var title = $.text({
+    let title = $.text({
       ctx: $.ctxmg,
       x: $.cw / 2,
       y: $.ch / 2 - 100,
@@ -1404,7 +1401,7 @@ $.setupStates = function () {
     $.ctxmg.fill();
 
     $.ctxmg.beginPath();
-    var bottomInfo = $.text({
+    let bottomInfo = $.text({
       ctx: $.ctxmg,
       x: $.cw / 2,
       y: $.ch - 172,
@@ -1425,7 +1422,7 @@ $.setupStates = function () {
     $.clearScreen();
 
     $.ctxmg.beginPath();
-    var statsTitle = $.text({
+    let statsTitle = $.text({
       ctx: $.ctxmg,
       x: $.cw / 2,
       y: 150,
@@ -1438,7 +1435,7 @@ $.setupStates = function () {
       snap: 1,
       render: 1,
     });
-    var gradient = $.ctxmg.createLinearGradient(
+    let gradient = $.ctxmg.createLinearGradient(
       statsTitle.sx,
       statsTitle.sy,
       statsTitle.sx,
@@ -1450,7 +1447,7 @@ $.setupStates = function () {
     $.ctxmg.fill();
 
     $.ctxmg.beginPath();
-    var statKeys = $.text({
+    let statKeys = $.text({
       ctx: $.ctxmg,
       x: $.cw / 2 - 10,
       y: statsTitle.ey + 39,
@@ -1467,7 +1464,7 @@ $.setupStates = function () {
     $.ctxmg.fill();
 
     $.ctxmg.beginPath();
-    var statsValues = $.text({
+    let statsValues = $.text({
       ctx: $.ctxmg,
       x: $.cw / 2 + 10,
       y: statsTitle.ey + 39,
@@ -1496,7 +1493,7 @@ $.setupStates = function () {
     $.ctxmg.fillStyle = "#fff";
     $.ctxmg.fill();
 
-    var i = $.buttons.length;
+    let i = $.buttons.length;
     while (i--) {
       $.buttons[i].render(i);
     }
@@ -1514,7 +1511,7 @@ $.setupStates = function () {
     $.clearScreen();
 
     $.ctxmg.beginPath();
-    var creditsTitle = $.text({
+    let creditsTitle = $.text({
       ctx: $.ctxmg,
       x: $.cw / 2,
       y: 100,
@@ -1527,7 +1524,7 @@ $.setupStates = function () {
       snap: 1,
       render: 1,
     });
-    var gradient = $.ctxmg.createLinearGradient(
+    let gradient = $.ctxmg.createLinearGradient(
       creditsTitle.sx,
       creditsTitle.sy,
       creditsTitle.sx,
@@ -1539,7 +1536,7 @@ $.setupStates = function () {
     $.ctxmg.fill();
 
     $.ctxmg.beginPath();
-    var creditKeys = $.text({
+    let creditKeys = $.text({
       ctx: $.ctxmg,
       x: $.cw / 2 - 10,
       y: creditsTitle.ey + 49,
@@ -1556,7 +1553,7 @@ $.setupStates = function () {
     $.ctxmg.fill();
 
     $.ctxmg.beginPath();
-    var creditValues = $.text({
+    let creditValues = $.text({
       ctx: $.ctxmg,
       x: $.cw / 2 + 10,
       y: creditsTitle.ey + 49,
@@ -1572,7 +1569,7 @@ $.setupStates = function () {
     $.ctxmg.fillStyle = "#fff";
     $.ctxmg.fill();
 
-    var i = $.buttons.length;
+    let i = $.buttons.length;
     while (i--) {
       $.buttons[i].render(i);
     }
@@ -1595,7 +1592,7 @@ $.setupStates = function () {
     $.enemyOffsetMod += $.slow ? $.dt / 3 : $.dt;
 
     // update entities
-    var i = $.enemies.length;
+    let i = $.enemies.length;
     while (i--) {
       $.enemies[i].update(i);
     }
@@ -1664,7 +1661,7 @@ $.setupStates = function () {
 
     // handle gameover
     if ($.hero.life <= 0) {
-      var alpha = ($.gameoverTick / $.gameoverTickMax) * 0.8;
+      let alpha = ($.gameoverTick / $.gameoverTickMax) * 0.8;
       alpha = Math.min(1, Math.max(0, alpha));
       $.ctxmg.fillStyle = "hsla(0, 100%, 0%, " + alpha + ")";
       $.ctxmg.fillRect(0, 0, $.cw, $.ch);
@@ -1701,7 +1698,7 @@ $.setupStates = function () {
             saturation: 0,
           })
         );
-        for (var i = 0; i < $.powerupTimers.length; i++) {
+        for (let i = 0; i < $.powerupTimers.length; i++) {
           $.powerupTimers[i] = 0;
         }
         $.gameoverExplosion = 1;
@@ -1725,7 +1722,7 @@ $.setupStates = function () {
     $.ctxmg.fillRect(0, 0, $.cw, $.ch);
 
     $.ctxmg.beginPath();
-    var pauseText = $.text({
+    let pauseText = $.text({
       ctx: $.ctxmg,
       x: $.cw / 2,
       y: $.ch / 2 - 50,
@@ -1738,7 +1735,7 @@ $.setupStates = function () {
       snap: 1,
       render: 1,
     });
-    var gradient = $.ctxmg.createLinearGradient(
+    let gradient = $.ctxmg.createLinearGradient(
       pauseText.sx,
       pauseText.sy,
       pauseText.sx,
@@ -1749,7 +1746,7 @@ $.setupStates = function () {
     $.ctxmg.fillStyle = gradient;
     $.ctxmg.fill();
 
-    var i = $.buttons.length;
+    let i = $.buttons.length;
     while (i--) {
       $.buttons[i].render(i);
     }
@@ -1767,7 +1764,7 @@ $.setupStates = function () {
     $.clearScreen();
     $.ctxmg.putImageData($.screenshot, 0, 0);
 
-    var i = $.buttons.length;
+    let i = $.buttons.length;
     while (i--) {
       $.buttons[i].update(i);
     }
@@ -1777,7 +1774,7 @@ $.setupStates = function () {
     }
 
     $.ctxmg.beginPath();
-    var gameoverTitle = $.text({
+    let gameoverTitle = $.text({
       ctx: $.ctxmg,
       x: $.cw / 2,
       y: 150,
@@ -1790,7 +1787,7 @@ $.setupStates = function () {
       snap: 1,
       render: 1,
     });
-    var gradient = $.ctxmg.createLinearGradient(
+    let gradient = $.ctxmg.createLinearGradient(
       gameoverTitle.sx,
       gameoverTitle.sy,
       gameoverTitle.sx,
@@ -1802,7 +1799,7 @@ $.setupStates = function () {
     $.ctxmg.fill();
 
     $.ctxmg.beginPath();
-    var gameoverStatsKeys = $.text({
+    let gameoverStatsKeys = $.text({
       ctx: $.ctxmg,
       x: $.cw / 2 - 10,
       y: gameoverTitle.ey + 51,
@@ -1819,7 +1816,7 @@ $.setupStates = function () {
     $.ctxmg.fill();
 
     $.ctxmg.beginPath();
-    var gameoverStatsValues = $.text({
+    let gameoverStatsValues = $.text({
       ctx: $.ctxmg,
       x: $.cw / 2 + 10,
       y: gameoverTitle.ey + 51,
@@ -1855,7 +1852,7 @@ $.loop = function () {
   window.requestAnimationFrame($.loop);
 
   // setup the pressed state for all keys
-  for (var k in $.keys.state) {
+  for (let k in $.keys.state) {
     if ($.keys.state[k] && !$.okeys[k]) {
       $.keys.pressed[k] = 1;
     } else {
@@ -1869,7 +1866,7 @@ $.loop = function () {
   // always listen for mute toggle
   if ($.keys.pressed.m) {
     $.mute = ~~!$.mute;
-    var i = $.audio.references.length;
+    let i = $.audio.references.length;
     while (i--) {
       $.audio.references[i].volume = ~~!$.mute;
     }
@@ -1879,7 +1876,7 @@ $.loop = function () {
 
   // move current keys into old keys
   $.okeys = {};
-  for (var k in $.keys.state) {
+  for (let k in $.keys.state) {
     $.okeys[k] = $.keys.state[k];
   }
 };

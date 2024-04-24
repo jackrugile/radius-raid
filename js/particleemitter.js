@@ -2,15 +2,15 @@
 Init
 ==============================================================================*/
 $.ParticleEmitter = function (opt) {
-  for (var k in opt) {
+  for (let k in opt) {
     this[k] = opt[k];
   }
   this.particles = [];
-  for (var i = 0; i < this.count; i++) {
-    var radius = Math.sqrt(Math.random()) * this.spawnRange,
-      angle = Math.random() * $.twopi,
-      x = this.x + Math.cos(angle) * radius,
-      y = this.y + Math.sin(angle) * radius;
+  for (let i = 0; i < this.count; i++) {
+    let radius = Math.sqrt(Math.random()) * this.spawnRange;
+    let angle = Math.random() * $.twopi;
+    let x = this.x + Math.cos(angle) * radius;
+    let y = this.y + Math.sin(angle) * radius;
     this.particles.push(
       new $.Particle({
         parent: this.particles,
@@ -31,7 +31,7 @@ $.ParticleEmitter = function (opt) {
 Update
 ==============================================================================*/
 $.ParticleEmitter.prototype.update = function (i) {
-  var i2 = this.particles.length;
+  let i2 = this.particles.length;
   while (i2--) {
     this.particles[i2].update(i2);
   }
@@ -44,7 +44,7 @@ $.ParticleEmitter.prototype.update = function (i) {
 Render
 ==============================================================================*/
 $.ParticleEmitter.prototype.render = function (i) {
-  var i2 = this.particles.length;
+  let i2 = this.particles.length;
   while (i2--) {
     this.particles[i2].render(i2);
   }

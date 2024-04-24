@@ -105,7 +105,7 @@ $.definitions.enemies = [
       }
     },
     behavior: function () {
-      var speed = this.speed;
+      let speed = this.speed;
       if ($.slow) {
         speed = this.speed / $.slowEnemyDivider;
       }
@@ -123,7 +123,7 @@ $.definitions.enemies = [
     hue: 120,
     lockBounds: 1,
     setup: function () {
-      var rand = Math.floor($.util.rand(0, 2));
+      let rand = Math.floor($.util.rand(0, 2));
       if (this.start == "top") {
         this.direction = rand ? $.pi / 2 + $.pi / 4 : $.pi / 2 - $.pi / 4;
       } else if (this.start == "right") {
@@ -135,7 +135,7 @@ $.definitions.enemies = [
       }
     },
     behavior: function () {
-      var speed = this.speed;
+      let speed = this.speed;
       if ($.slow) {
         speed = this.speed / $.slowEnemyDivider;
       }
@@ -152,14 +152,14 @@ $.definitions.enemies = [
     radius: 20,
     hue: 330,
     behavior: function () {
-      var speed = this.speed;
+      let speed = this.speed;
       if ($.slow) {
         speed = this.speed / $.slowEnemyDivider;
       }
 
-      var dx = $.hero.x - this.x,
-        dy = $.hero.y - this.y,
-        direction = Math.atan2(dy, dx);
+      let dx = $.hero.x - this.x;
+      let dy = $.hero.y - this.y;
+      let direction = Math.atan2(dy, dx);
       this.vx = Math.cos(direction) * speed;
       this.vy = Math.sin(direction) * speed;
     },
@@ -173,21 +173,21 @@ $.definitions.enemies = [
     hue: 210,
     canSpawn: 1,
     behavior: function () {
-      var speed = this.speed;
+      let speed = this.speed;
       if ($.slow) {
         speed = this.speed / $.slowEnemyDivider;
       }
 
-      var dx = $.hero.x - this.x,
-        dy = $.hero.y - this.y,
-        direction = Math.atan2(dy, dx);
+      let dx = $.hero.x - this.x;
+      let dy = $.hero.y - this.y;
+      let direction = Math.atan2(dy, dx);
       this.vx = Math.cos(direction) * speed;
       this.vy = Math.sin(direction) * speed;
     },
     death: function () {
       if (this.canSpawn) {
-        for (var i = 0; i < 4; i++) {
-          var enemy = $.spawnEnemy(this.type);
+        for (let i = 0; i < 4; i++) {
+          let enemy = $.spawnEnemy(this.type);
           enemy.radius = 20;
           enemy.canSpawn = 0;
           enemy.speed = 1;
@@ -229,7 +229,7 @@ $.definitions.enemies = [
       }
     },
     behavior: function () {
-      var speed = this.speed * $.util.rand(1, 2);
+      let speed = this.speed * $.util.rand(1, 2);
       if ($.slow) {
         speed = this.speed / $.slowEnemyDivider;
       }
@@ -249,14 +249,14 @@ $.definitions.enemies = [
     saturation: 0,
     lightness: 30,
     behavior: function () {
-      var speed = this.speed;
+      let speed = this.speed;
       if ($.slow) {
         speed = this.speed / $.slowEnemyDivider;
       }
 
-      var dx = $.hero.x - this.x,
-        dy = $.hero.y - this.y,
-        direction = Math.atan2(dy, dx);
+      let dx = $.hero.x - this.x;
+      let dy = $.hero.y - this.y;
+      let direction = Math.atan2(dy, dx);
       this.vx = Math.cos(direction) * speed;
       this.vy = Math.sin(direction) * speed;
     },
@@ -269,14 +269,14 @@ $.definitions.enemies = [
     radius: 80,
     hue: 150,
     behavior: function () {
-      var speed = this.speed;
+      let speed = this.speed;
       if ($.slow) {
         speed = this.speed / $.slowEnemyDivider;
       }
 
-      var dx = $.hero.x - this.x,
-        dy = $.hero.y - this.y,
-        direction = Math.atan2(dy, dx);
+      let dx = $.hero.x - this.x;
+      let dy = $.hero.y - this.y;
+      let direction = Math.atan2(dy, dx);
       this.vx = Math.cos(direction) * speed;
       this.vy = Math.sin(direction) * speed;
     },
@@ -289,14 +289,14 @@ $.definitions.enemies = [
     radius: 15,
     hue: 300,
     behavior: function () {
-      var speed = this.speed;
+      let speed = this.speed;
       if ($.slow) {
         speed = this.speed / $.slowEnemyDivider;
       }
 
-      var dx = $.hero.x - this.x,
-        dy = $.hero.y - this.y,
-        direction = Math.atan2(dy, dx);
+      let dx = $.hero.x - this.x;
+      let dy = $.hero.y - this.y;
+      let direction = Math.atan2(dy, dx);
       direction = direction + Math.cos($.tick / 50) * 1;
       this.vx = Math.cos(direction) * speed;
       this.vy = Math.sin(direction) * speed;
@@ -313,16 +313,16 @@ $.definitions.enemies = [
     saturation: 0,
     lightness: 100,
     behavior: function () {
-      var speed = this.speed,
-        growth = this.growth;
+      let speed = this.speed;
+      let growth = this.growth;
       if ($.slow) {
         speed = this.speed / $.slowEnemyDivider;
         growth = this.growth / $.slowEnemyDivider;
       }
 
-      var dx = $.hero.x - this.x,
-        dy = $.hero.y - this.y,
-        direction = Math.atan2(dy, dx);
+      let dx = $.hero.x - this.x;
+      let dy = $.hero.y - this.y;
+      let direction = Math.atan2(dy, dx);
 
       if (Math.sqrt(dx * dx + dy * dy) > 200) {
         this.vx = Math.cos(direction) * speed;
@@ -363,8 +363,8 @@ $.definitions.enemies = [
     radius: 20,
     hue: 60,
     setup: function () {
-      var dx = this.x - $.hero.x,
-        dy = this.y - $.hero.y;
+      let dx = this.x - $.hero.x;
+      let dy = this.y - $.hero.y;
       this.angle = Math.atan2(dy, dx);
       this.distance = Math.sqrt(dx * dx + dy * dy);
       if (Math.random() > 0.5) {
@@ -372,8 +372,8 @@ $.definitions.enemies = [
       }
     },
     behavior: function () {
-      var speed = this.speed,
-        angleSpeed = this.angleSpeed;
+      let speed = this.speed;
+      let angleSpeed = this.angleSpeed;
       if ($.slow) {
         speed = this.speed / $.slowEnemyDivider;
         angleSpeed = this.angleSpeed / $.slowEnemyDivider;
@@ -397,14 +397,14 @@ $.definitions.enemies = [
     spawnTick: 0,
     spawnMax: 250,
     behavior: function () {
-      var speed = this.speed;
+      let speed = this.speed;
       if ($.slow) {
         speed = this.speed / $.slowEnemyDivider;
       }
 
-      var dx = $.hero.x - this.x,
-        dy = $.hero.y - this.y,
-        direction = Math.atan2(dy, dx);
+      let dx = $.hero.x - this.x;
+      let dy = $.hero.y - this.y;
+      let direction = Math.atan2(dy, dx);
       direction = direction + Math.cos($.tick / 50) * 1;
       this.vx = Math.cos(direction) * speed;
       this.vy = Math.sin(direction) * speed;
@@ -414,7 +414,7 @@ $.definitions.enemies = [
           this.spawnTick += $.dt;
         } else {
           this.spawnTick = 0;
-          var enemy = $.spawnEnemy(this.type);
+          let enemy = $.spawnEnemy(this.type);
           enemy.radius = 20;
           enemy.canSpawn = 0;
           enemy.speed = 3;
@@ -439,13 +439,13 @@ $.definitions.enemies = [
       this.yTarget = $.util.rand(50, $.wh - 50);
     },
     behavior: function () {
-      var speed = this.speed;
+      let speed = this.speed;
       if ($.slow) {
         speed = this.speed / $.slowEnemyDivider;
       }
-      var dx = this.xTarget - this.x,
-        dy = this.yTarget - this.y,
-        direction = Math.atan2(dy, dx);
+      let dx = this.xTarget - this.x;
+      let dy = this.yTarget - this.y;
+      let direction = Math.atan2(dy, dx);
       if (Math.sqrt(dx * dx + dy * dy) > this.speed) {
         this.vx = Math.cos(direction) * speed;
         this.vy = Math.sin(direction) * speed;
@@ -477,7 +477,7 @@ $.definitions.enemies = [
           this.direction = 0;
         }
       } else {
-        var rand = Math.floor($.util.rand(0, 2));
+        let rand = Math.floor($.util.rand(0, 2));
         if (this.start == "top") {
           this.direction = rand ? $.pi / 2 + $.pi / 4 : $.pi / 2 - $.pi / 4;
         } else if (this.start == "right") {
@@ -490,7 +490,7 @@ $.definitions.enemies = [
       }
     },
     behavior: function () {
-      var speed = this.speed;
+      let speed = this.speed;
       if ($.slow) {
         speed = this.speed / $.slowEnemyDivider;
       }
@@ -510,11 +510,11 @@ $.definitions.enemies = [
 Levels
 ==============================================================================*/
 $.definitions.levels = [];
-var base = 25;
-for (var i = 0; i < $.definitions.enemies.length; i++) {
-  var distribution = [];
-  for (var di = 0; di < i + 1; di++) {
-    var value = di == i ? Math.floor((i + 1) * base * 0.75) : (i + 1) * base;
+let base = 25;
+for (let i = 0; i < $.definitions.enemies.length; i++) {
+  let distribution = [];
+  for (let di = 0; di < i + 1; di++) {
+    let value = di == i ? Math.floor((i + 1) * base * 0.75) : (i + 1) * base;
     value = i == 0 ? base : value;
     distribution.push({
       time: value,

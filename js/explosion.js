@@ -2,7 +2,7 @@
 Init
 ==============================================================================*/
 $.Explosion = function (opt) {
-  for (var k in opt) {
+  for (let k in opt) {
     this[k] = opt[k];
   }
   this.tick = 0;
@@ -40,8 +40,8 @@ $.Explosion.prototype.render = function (i) {
       $.ch
     )
   ) {
-    var radius = 1 + (this.tick / (this.tickMax / 2)) * this.radius,
-      lineWidth = $.util.rand(1, this.radius / 2);
+    let radius = 1 + (this.tick / (this.tickMax / 2)) * this.radius;
+    let lineWidth = $.util.rand(1, this.radius / 2);
     $.util.strokeCircle(
       $.ctxmg,
       this.x,
@@ -59,11 +59,11 @@ $.Explosion.prototype.render = function (i) {
       lineWidth
     );
     $.ctxmg.beginPath();
-    var size = $.util.rand(1, 1.5);
-    for (var i = 0; i < 20; i++) {
-      var angle = $.util.rand(0, $.twopi),
-        x = this.x + Math.cos(angle) * radius,
-        y = this.y + Math.sin(angle) * radius;
+    let size = $.util.rand(1, 1.5);
+    for (let i = 0; i < 20; i++) {
+      let angle = $.util.rand(0, $.twopi);
+      let x = this.x + Math.cos(angle) * radius;
+      let y = this.y + Math.sin(angle) * radius;
 
       $.ctxmg.rect(x - size / 2, y - size / 2, size, size);
     }

@@ -4,7 +4,7 @@ Storage.prototype.setObject = function (key, value) {
 };
 
 Storage.prototype.getObject = function (key) {
-  var value = this.getItem(key);
+  let value = this.getItem(key);
   return value && JSON.parse(value);
 };
 

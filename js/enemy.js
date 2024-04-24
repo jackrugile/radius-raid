@@ -3,7 +3,7 @@ Init
 ==============================================================================*/
 $.Enemy = function (opt) {
   // set always and optional
-  for (var k in opt) {
+  for (let k in opt) {
     this[k] = opt[k];
   }
 
@@ -177,7 +177,7 @@ Render
 ==============================================================================*/
 $.Enemy.prototype.render = function (i) {
   if (this.inView) {
-    var mod = $.enemyOffsetMod / 6;
+    let mod = $.enemyOffsetMod / 6;
     $.util.fillCircle($.ctxmg, this.x, this.y, this.radius, this.fillStyle);
     $.util.strokeCircle(
       $.ctxmg,

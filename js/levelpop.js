@@ -2,7 +2,7 @@
 Init
 ==============================================================================*/
 $.LevelPop = function (opt) {
-  for (var k in opt) {
+  for (let k in opt) {
     this[k] = opt[k];
   }
   this.x = $.cw - 20;
@@ -45,13 +45,12 @@ $.LevelPop.prototype.render = function (i) {
     snap: 1,
     render: 1,
   });
+  let alpha = this.baseAlpha;
   if (this.tick < this.tickMax * 0.25) {
-    var alpha = (this.tick / (this.tickMax * 0.25)) * this.baseAlpha;
+    alpha = (this.tick / (this.tickMax * 0.25)) * this.baseAlpha;
   } else if (this.tick > this.tickMax - this.tickMax * 0.25) {
-    var alpha =
+    alpha =
       ((this.tickMax - this.tick) / (this.tickMax * 0.25)) * this.baseAlpha;
-  } else {
-    var alpha = this.baseAlpha;
   }
   alpha = Math.min(1, Math.max(0, alpha));
 

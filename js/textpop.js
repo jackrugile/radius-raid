@@ -2,7 +2,7 @@
 Init
 ==============================================================================*/
 $.TextPop = function (opt) {
-  for (var k in opt) {
+  for (let k in opt) {
     this[k] = opt[k];
   }
   this.alpha = 2;

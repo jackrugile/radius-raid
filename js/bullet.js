@@ -2,7 +2,7 @@
 Init
 ==============================================================================*/
 $.Bullet = function (opt) {
-  for (var k in opt) {
+  for (let k in opt) {
     this[k] = opt[k];
   }
   this.enemiesHit = [];
@@ -39,9 +39,9 @@ $.Bullet.prototype.update = function (i) {
   /*==============================================================================
   Check Collisions
   ==============================================================================*/
-  var ei = $.enemies.length;
+  let ei = $.enemies.length;
   while (ei--) {
-    var enemy = $.enemies[ei];
+    let enemy = $.enemies[ei];
     if (
       $.util.distance(this.x, this.y, enemy.x, enemy.y) <=
         enemy.radius + this.size / 2 ||

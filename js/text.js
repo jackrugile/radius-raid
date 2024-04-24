@@ -1,12 +1,12 @@
 $.textLine = function (opt) {
-  var textLength = opt.text.length,
-    size = 5;
-  for (var i = 0; i < textLength; i++) {
-    var letter =
+  let textLength = opt.text.length;
+  let size = 5;
+  for (let i = 0; i < textLength; i++) {
+    let letter =
       $.definitions.letters[opt.text.charAt(i)] ||
       $.definitions.letters["unknown"];
-    for (var y = 0; y < size; y++) {
-      for (var x = 0; x < size; x++) {
+    for (let y = 0; y < size; y++) {
+      for (let x = 0; x < size; x++) {
         if (letter[y][x] === 1) {
           opt.ctx.rect(
             opt.x + x * opt.scale + (size * opt.scale + opt.hspacing) * i,
@@ -21,22 +21,22 @@ $.textLine = function (opt) {
 };
 
 $.text = function (opt) {
-  var size = 5,
-    letterSize = size * opt.scale,
-    lines = opt.text.split("\n"),
-    linesCopy = lines.slice(0),
-    lineCount = lines.length,
-    longestLine = linesCopy.sort(function (a, b) {
-      return b.length - a.length;
-    })[0],
-    textWidth =
-      longestLine.length * letterSize + (longestLine.length - 1) * opt.hspacing,
-    textHeight = lineCount * letterSize + (lineCount - 1) * opt.vspacing;
+  let size = 5;
+  let letterSize = size * opt.scale;
+  let lines = opt.text.split("\n");
+  let linesCopy = lines.slice(0);
+  let lineCount = lines.length;
+  let longestLine = linesCopy.sort(function (a, b) {
+    return b.length - a.length;
+  })[0];
+  let textWidth =
+    longestLine.length * letterSize + (longestLine.length - 1) * opt.hspacing;
+  let textHeight = lineCount * letterSize + (lineCount - 1) * opt.vspacing;
 
-  var sx = opt.x,
-    sy = opt.y,
-    ex = opt.x + textWidth,
-    ey = opt.y + textHeight;
+  let sx = opt.x;
+  let sy = opt.y;
+  let ex = opt.x + textWidth;
+  let ey = opt.y + textHeight;
 
   if (opt.halign == "center") {
     sx = opt.x - textWidth / 2;
@@ -54,15 +54,16 @@ $.text = function (opt) {
     ey = opt.y;
   }
 
-  var cx = sx + textWidth / 2,
-    cy = sy + textHeight / 2;
+  let cx = sx + textWidth / 2;
+  let cy = sy + textHeight / 2;
 
   if (opt.render) {
-    for (var i = 0; i < lineCount; i++) {
-      var line = lines[i],
-        lineWidth = line.length * letterSize + (line.length - 1) * opt.hspacing,
-        x = opt.x,
-        y = opt.y + (letterSize + opt.vspacing) * i;
+    for (let i = 0; i < lineCount; i++) {
+      let line = lines[i];
+      let lineWidth =
+        line.length * letterSize + (line.length - 1) * opt.hspacing;
+      let x = opt.x;
+      let y = opt.y + (letterSize + opt.vspacing) * i;
 
       if (opt.halign == "center") {
         x = opt.x - lineWidth / 2;

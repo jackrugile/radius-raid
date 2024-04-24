@@ -3,7 +3,7 @@ $.audio = {
   references: [],
   play: function (sound) {
     if (!$.mute) {
-      var audio = $.audio.sounds[sound];
+      let audio = $.audio.sounds[sound];
       if (audio.length > 1) {
         audio = $.audio.sounds[sound][Math.floor($.util.rand(0, audio.length))];
       } else {
@@ -19,7 +19,7 @@ $.audio = {
   },
 };
 
-for (var k in $.definitions.audio) {
+for (let k in $.definitions.audio) {
   $.audio.sounds[k] = [];
 
   $.definitions.audio[k].params.forEach(function (elem, index, array) {
@@ -29,8 +29,8 @@ for (var k in $.definitions.audio) {
       pool: [],
     });
 
-    for (var i = 0; i < $.definitions.audio[k].count; i++) {
-      var audio = new Audio();
+    for (let i = 0; i < $.definitions.audio[k].count; i++) {
+      let audio = new Audio();
       audio.src = jsfxr(elem);
       $.audio.references.push(audio);
       $.audio.sounds[k][index].pool.push(audio);
