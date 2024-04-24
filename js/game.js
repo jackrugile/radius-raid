@@ -1245,7 +1245,7 @@ $.setState = function (state) {
       scale: 3,
       title: "JS13KGAMES",
       action: function () {
-        location.href = "http://js13kgames.com";
+        window.open("http://js13kgames.com", "_blank").focus();
         $.mouse.down = 0;
       },
     });
@@ -1405,12 +1405,12 @@ $.setupStates = function () {
       ctx: $.ctxmg,
       x: $.cw / 2,
       y: $.ch - 172,
-      text: "CREATED BY JACK RUGILE FOR JS13KGAMES 2013",
+      text: "MADE BY JACK RUGILE",
       hspacing: 1,
       vspacing: 1,
       halign: "center",
       valign: "bottom",
-      scale: 1,
+      scale: 2,
       snap: 1,
       render: 1,
     });
