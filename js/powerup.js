@@ -46,9 +46,13 @@ $.Powerup.prototype.update = function (i) {
   Check Bounds
   ==============================================================================*/
   if (this.x <= 0 || this.x + this.width >= $.ww) {
+    this.x = Math.min(this.x, $.ww - this.width);
+    this.x = Math.max(this.x, 0);
     this.direction = Math.atan2(this.vy, -this.vx);
   }
   if (this.y <= 0 || this.y + this.height >= $.wh) {
+    this.y = Math.min(this.y, $.wh - this.height);
+    this.y = Math.max(this.y, 0);
     this.direction = Math.atan2(-this.vy, this.vx);
   }
 
