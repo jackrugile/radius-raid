@@ -990,18 +990,15 @@ $.updateScreen = function () {
   //   ($.cy * yModify - $.hero.y - $.screen.y) * (1 - Math.exp(-0.1 * $.dt));
 
   // update rumble levels, keep X and Y changes consistent, apply rumble
+  $.rumble.x = 0;
+  $.rumble.y = 0;
+
   if ($.rumble.level > 0) {
-    $.rumble.level -= $.rumble.decay;
-    $.rumble.level = $.rumble.level < 0 ? 0 : $.rumble.level;
+    $.rumble.level -= $.rumble.decay * $.dt;
+    $.rumble.level = Math.max(0, $.rumble.level);
     $.rumble.x = $.util.rand(-$.rumble.level, $.rumble.level);
     $.rumble.y = $.util.rand(-$.rumble.level, $.rumble.level);
-  } else {
-    $.rumble.x = 0;
-    $.rumble.y = 0;
   }
-
-  //$.screen.x -= $.rumble.x;
-  //$.screen.y -= $.rumble.y;
 
   // animate background canvas
   $.cbg1.style.marginLeft =

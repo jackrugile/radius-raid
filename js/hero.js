@@ -221,7 +221,7 @@ $.Hero.prototype.update = function () {
   }
 
   if (this.takingDamage) {
-    $.rumble.level = 3;
+    $.rumble.level = 6;
 
     //this.life -= 0.0075;
 
