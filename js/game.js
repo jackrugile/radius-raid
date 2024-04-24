@@ -48,18 +48,18 @@ $.init = function () {
       down: 0,
       left: 0,
       right: 0,
-      f: 0,
       m: 0,
       p: 0,
+      esc: 0,
     },
     pressed: {
       up: 0,
       down: 0,
       left: 0,
       right: 0,
-      f: 0,
       m: 0,
       p: 0,
+      esc: 0,
     },
   };
   $.okeys = {};
@@ -872,14 +872,14 @@ $.keydowncb = function (e) {
   if (e === 37 || e === 65) {
     $.keys.state.left = 1;
   }
-  if (e === 70) {
-    $.keys.state.f = 1;
-  }
   if (e === 77) {
     $.keys.state.m = 1;
   }
   if (e === 80) {
     $.keys.state.p = 1;
+  }
+  if (e === 27) {
+    $.keys.state.esc = 1;
   }
 };
 
@@ -897,14 +897,14 @@ $.keyupcb = function (e) {
   if (e === 37 || e === 65) {
     $.keys.state.left = 0;
   }
-  if (e === 70) {
-    $.keys.state.f = 0;
-  }
   if (e === 77) {
     $.keys.state.m = 0;
   }
   if (e === 80) {
     $.keys.state.p = 0;
+  }
+  if (e === 27) {
+    $.keys.state.esc = 0;
   }
 };
 
@@ -1493,6 +1493,10 @@ $.setupStates = function () {
     while (i--) {
       $.buttons[i].update(i);
     }
+
+    if ($.keys.pressed.esc) {
+      $.setState("menu");
+    }
   };
 
   $.states["credits"] = function () {
@@ -1564,6 +1568,10 @@ $.setupStates = function () {
     i = $.buttons.length;
     while (i--) {
       $.buttons[i].update(i);
+    }
+
+    if ($.keys.pressed.esc) {
+      $.setState("menu");
     }
   };
 
@@ -1693,7 +1701,7 @@ $.setupStates = function () {
     $.tick += $.dt;
 
     // listen for pause
-    if ($.keys.pressed.p) {
+    if ($.keys.pressed.p || $.keys.pressed.esc) {
       $.setState("pause");
     }
   };
@@ -1833,7 +1841,7 @@ $.setupStates = function () {
 Loop
 ==============================================================================*/
 $.loop = function () {
-  requestAnimFrame($.loop);
+  window.requestAnimationFrame($.loop);
 
   // setup the pressed state for all keys
   for (var k in $.keys.state) {
