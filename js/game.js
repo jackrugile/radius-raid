@@ -931,6 +931,10 @@ $.blurcb = function () {
   }
 };
 
+$.contextmenucb = function (e) {
+  e.preventDefault();
+};
+
 $.bindEvents = function () {
   window.addEventListener("mousemove", $.mousemovecb);
   window.addEventListener("mousedown", $.mousedowncb);
@@ -939,6 +943,7 @@ $.bindEvents = function () {
   window.addEventListener("keyup", $.keyupcb);
   window.addEventListener("resize", $.resizecb);
   window.addEventListener("blur", $.blurcb);
+  window.addEventListener("contextmenu", $.contextmenucb);
 };
 
 /*==============================================================================
