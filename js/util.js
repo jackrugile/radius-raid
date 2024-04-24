@@ -1,17 +1,6 @@
 /*==============================================================================
 Miscellaneous
 ==============================================================================*/
-window["requestAnimFrame"] = (function () {
-  return (
-    window.requestAnimationFrame ||
-    window.webkitRequestAnimationFrame ||
-    window.mozRequestAnimationFrame ||
-    function (a) {
-      window.setTimeout(a, 1e3 / 60);
-    }
-  );
-})();
-
 $.util = {};
 $.pi = Math.PI;
 $.twopi = $.pi * 2;
