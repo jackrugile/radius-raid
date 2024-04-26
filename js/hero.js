@@ -136,7 +136,7 @@ $.Hero.prototype.update = function () {
   /*==============================================================================
   Fire Weapon
   ==============================================================================*/
-  if (this.weapon.fireRateTick < this.weapon.fireRateMax) {
+  if (this.weapon.fireRateTick <= this.weapon.fireRateMax) {
     this.weapon.fireRateTick += $.dt;
   } else {
     if ($.mouse.down) {
@@ -159,7 +159,17 @@ $.Hero.prototype.update = function () {
       }
 
       this.weapon.fireRateTick =
-        this.weapon.fireRateTick - this.weapon.fireRateMax;
+        this.weapon.fireRateTick - this.weapon.fireRateMax + $.dt;
+
+      // this.weapon.fireRateTick =
+      //   this.weapon.fireRateMax - this.weapon.fireRateTick;
+
+      // this.weapon.fireRateTick = 0;
+
+      // this.weapon.fireRateTick = $.dt;
+
+      // console.log(this.weapon.fireRateTick);
+
       this.weapon.fireFlag = 6;
 
       let spreadStart = 0;
