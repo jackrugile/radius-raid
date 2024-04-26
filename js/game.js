@@ -1089,7 +1089,7 @@ $.updatePowerupTimers = function () {
 };
 
 $.spawnPowerup = function (x, y) {
-  if (Math.random() < 0.7) {
+  if (Math.random() < 0.1) {
     let min = $.hero.life < 0.9 ? 0 : 1;
     let type = Math.floor($.util.rand(min, $.definitions.powerups.length));
     let params = $.definitions.powerups[type];

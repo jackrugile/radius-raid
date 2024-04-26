@@ -34,9 +34,15 @@ $.audio.sounds = {
       volume: 0.5,
     }),
   ],
-  shoot: [new Howl({ src: ["./sounds/shoot-0.webm", "./sounds/shoot-0.mp3"] })],
+  shoot: [
+    new Howl({
+      src: ["./sounds/shoot-0.webm", "./sounds/shoot-0.mp3"],
+    }),
+  ],
   shootAlt: [
-    new Howl({ src: ["./sounds/shootAlt-0.webm", "./sounds/shootAlt-0.mp3"] }),
+    new Howl({
+      src: ["./sounds/shootAlt-0.webm", "./sounds/shootAlt-0.mp3"],
+    }),
   ],
   takingDamage: [
     new Howl({
