@@ -5,17 +5,24 @@ $.TextPop = function (opt) {
   for (let k in opt) {
     this[k] = opt[k];
   }
-  this.alpha = 2;
+  this.tick = 0;
+  this.tickMax = this.tickMax ? this.tickMax : 30;
+  this.alpha = 1;
+  this.scale = 2;
 };
 
 /*==============================================================================
 Update
 ==============================================================================*/
 $.TextPop.prototype.update = function (i) {
-  this.alpha -= 0.06 * $.dt;
+  let eased = $.ease.outBack(this.tick / this.tickMax, 0, 1, 1);
+  this.scale = eased * 2;
+  this.alpha = ((this.tickMax - this.tick) / this.tickMax) * 2;
 
-  if (this.alpha <= 0) {
+  if (this.tick >= this.tickMax) {
     $.textPops.splice(i, 1);
+  } else {
+    this.tick += $.dt;
   }
 };
 
@@ -33,7 +40,7 @@ $.TextPop.prototype.render = function (i) {
     vspacing: 0,
     halign: "center",
     valign: "center",
-    scale: 2,
+    scale: this.scale,
     snap: 0,
     render: 1,
   });
