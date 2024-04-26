@@ -39,7 +39,8 @@ $.init = function () {
     y: ($.wh - $.ch) / -2,
   };
 
-  $.mute = $.storage["mute"];
+  $.mute = $.storage["mute"] || false;
+  Howler.mute($.mute);
 
   $.keys = {
     state: {
@@ -482,7 +483,7 @@ $.renderInterface = function () {
     Slow Enemies Screen Cover
     ==============================================================================*/
   if ($.powerupTimers[1] > 0) {
-    $.ctxmg.fillStyle = "hsla(200, 100%, 20%, 0.05)";
+    $.ctxmg.fillStyle = "hsla(200, 100%, 20%, 0.1)";
     $.ctxmg.fillRect(0, 0, $.cw, $.ch);
   }
 
@@ -1088,7 +1089,7 @@ $.updatePowerupTimers = function () {
 };
 
 $.spawnPowerup = function (x, y) {
-  if (Math.random() < 0.1) {
+  if (Math.random() < 0.7) {
     let min = $.hero.life < 0.9 ? 0 : 1;
     let type = Math.floor($.util.rand(min, $.definitions.powerups.length));
     let params = $.definitions.powerups[type];
@@ -1652,11 +1653,12 @@ $.setupStates = function () {
         $.rumble.level = 25;
         $.explosions.push(
           new $.Explosion({
-            x: $.hero.x + $.util.rand(-10, 10),
-            y: $.hero.y + $.util.rand(-10, 10),
-            radius: 50,
+            x: $.hero.x,
+            y: $.hero.y,
+            radius: 100,
             hue: 0,
             saturation: 0,
+            tickMax: 120,
           })
         );
         $.particleEmitters.push(
@@ -1841,11 +1843,8 @@ $.loop = function () {
 
   // always listen for mute toggle
   if ($.keys.pressed.m) {
-    $.mute = ~~!$.mute;
-    let i = $.audio.references.length;
-    while (i--) {
-      $.audio.references[i].volume = ~~!$.mute;
-    }
+    $.mute = !$.mute;
+    Howler.mute($.mute);
     $.storage["mute"] = $.mute;
     $.updateStorage();
   }

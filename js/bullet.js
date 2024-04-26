@@ -48,26 +48,48 @@ $.Bullet.prototype.update = function (i) {
   let ei = $.enemies.length;
   while (ei--) {
     let enemy = $.enemies[ei];
-    if (
+
+    let collisionBuffer = this.size / 2;
+
+    let collision =
       $.util.distance(this.x, this.y, enemy.x, enemy.y) <=
-        enemy.radius + this.size / 2 ||
-      $.util.distance(this.ex, this.ey, enemy.x, enemy.y) <=
-        enemy.radius + this.size / 2
-    ) {
+      enemy.radius + collisionBuffer;
+
+    if (!collision) {
+      collision =
+        $.util.distance(this.ex, this.ey, enemy.x, enemy.y) <=
+        enemy.radius + collisionBuffer;
+    }
+
+    if (collision) {
       if (this.enemiesHit.indexOf(enemy.index) == -1) {
         this.enemiesHit.push(enemy.index);
         enemy.receiveDamage(ei, this.damage);
-        $.explosions.push(
-          new $.Explosion({
-            x: this.x + $.util.rand(-1, 1),
-            y: this.y + $.util.rand(-1, 1),
-            radius: 1 + $.util.rand(1, 3),
-            hue: this.hue,
-            saturation: this.saturation,
-            noAudio: true,
-            tickMax: 10,
-          })
-        );
+
+        if (this.inView) {
+          let dx = this.x - enemy.x;
+          let dy = this.y - enemy.y;
+          let angle = Math.atan2(dy, dx);
+          let explosionRadius = 1 + $.util.rand(1, 5);
+          let explosionX =
+            enemy.x + Math.cos(angle) * (enemy.radius + explosionRadius);
+          let explosionY =
+            enemy.y + Math.sin(angle) * (enemy.radius + explosionRadius);
+
+          $.explosions.push(
+            new $.Explosion({
+              x: explosionX,
+              y: explosionY,
+              vx: enemy.vx,
+              vy: enemy.vy,
+              radius: explosionRadius,
+              hue: this.hue,
+              saturation: this.saturation,
+              noAudio: true,
+              tickMax: 20,
+            })
+          );
+        }
       }
 
       if (!this.piercing) {
@@ -124,13 +146,27 @@ $.Bullet.prototype.update = function (i) {
         })
       );
 
-      $.audio.play("hit");
+      $.audio.play("hit").rate($.util.rand(2, 4));
+
+      let explosionRadius = 1 + $.util.rand(1, 5);
+      let explosionX = this.x;
+      explosionX = Math.min(
+        explosionX,
+        $.ww - $.edgeSize - explosionRadius - 1
+      );
+      explosionX = Math.max(explosionX, $.edgeSize + explosionRadius + 1);
+      let explosionY = this.y;
+      explosionY = Math.min(
+        explosionY,
+        $.wh - $.edgeSize - explosionRadius - 1
+      );
+      explosionY = Math.max(explosionY, $.edgeSize + explosionRadius + 1);
 
       $.explosions.push(
         new $.Explosion({
-          x: this.x + $.util.rand(-3, 3),
-          y: this.y + $.util.rand(-3, 3),
-          radius: 1 + $.util.rand(1, 10),
+          x: explosionX,
+          y: explosionY,
+          radius: explosionRadius,
           hue: this.hue,
           saturation: this.saturation,
           noAudio: true,

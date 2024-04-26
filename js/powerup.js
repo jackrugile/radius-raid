@@ -73,7 +73,7 @@ $.Powerup.prototype.update = function (i) {
       this.height
     )
   ) {
-    $.audio.play("powerup");
+    $.audio.play("powerup").rate($.util.rand(0.7, 1.3));
     $.powerupTimers[this.type] = $.powerupDuration;
     $.particleEmitters.push(
       new $.ParticleEmitter({

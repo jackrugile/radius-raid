@@ -98,7 +98,7 @@ Receive Damage
 ==============================================================================*/
 $.Enemy.prototype.receiveDamage = function (i, val) {
   if (this.inView) {
-    $.audio.play("hit");
+    $.audio.play("hit").rate($.util.rand(0.7, 1.3));
   }
   this.life -= val;
   this.hitFlag = 10;

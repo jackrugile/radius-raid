@@ -7,10 +7,20 @@ $.Explosion = function (opt) {
   }
   this.tick = 0;
   this.tickMax = this.tickMax ? this.tickMax : 30;
-  if ($.slow) {
-    $.audio.play("explosionAlt");
-  } else if (!this.noAudio) {
-    $.audio.play("explosion");
+
+  this.vx = this.vx || 0;
+  this.vy = this.vy || 0;
+
+  if (!this.noAudio) {
+    if ($.slow) {
+      $.audio
+        .play("explosionAlt")
+        .rate(1.25 - 0.75 * (this.radius / 80) + $.util.rand(-0.1, 0.1));
+    } else {
+      $.audio
+        .play("explosion")
+        .rate(1.25 - 0.75 * (this.radius / 80) + $.util.rand(-0.1, 0.1));
+    }
   }
 };
 
@@ -18,6 +28,9 @@ $.Explosion = function (opt) {
 Update
 ==============================================================================*/
 $.Explosion.prototype.update = function (i) {
+  this.x += this.vx * $.dt;
+  this.y += this.vy * $.dt;
+
   if (this.tick >= this.tickMax) {
     $.explosions.splice(i, 1);
   } else {
@@ -63,7 +76,7 @@ $.Explosion.prototype.render = function (i) {
 
     $.ctxmg.beginPath();
     let size = $.util.rand(1, 1.5);
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 10; i++) {
       let angle = $.util.rand(0, $.tau);
       let radius2 = $.util.rand(radius - lineWidth, radius + lineWidth);
       let x = this.x + Math.cos(angle) * radius2;

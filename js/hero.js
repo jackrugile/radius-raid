@@ -120,13 +120,22 @@ $.Hero.prototype.update = function () {
     this.weapon.fireRateTick += $.dt;
   } else {
     if ($.mouse.down) {
-      $.audio.play("shoot");
+      if ($.powerupTimers[2] > 0) {
+        $.audio.play("shoot").rate(1 + Math.sin($.tick * 0.4) * 0.3);
+      } else {
+        $.audio.play("shoot").rate(1 + Math.sin($.tick * 0.2) * 0.3);
+      }
+
       if (
         $.powerupTimers[2] > 0 ||
         $.powerupTimers[3] > 0 ||
         $.powerupTimers[4] > 0
       ) {
-        $.audio.play("shootAlt");
+        if ($.powerupTimers[2] > 0) {
+          $.audio.play("shootAlt").rate(1 + Math.sin($.tick * 0.2) * 0.3);
+        } else {
+          $.audio.play("shootAlt").rate(1 + Math.sin($.tick * 0.1) * 0.3);
+        }
       }
 
       this.weapon.fireRateTick =
@@ -272,7 +281,7 @@ $.Hero.prototype.update = function () {
 
     if (this.takingDamageAudioTick >= this.takingDamageAudioTickMax) {
       this.takingDamageAudioTick = 0;
-      $.audio.play("takingDamage");
+      $.audio.play("takingDamage").rate($.util.rand(0.8, 1.2));
     }
   }
 };
