@@ -7,17 +7,19 @@ $.Bullet = function (opt) {
   }
   this.enemiesHit = [];
   this.inView = 0;
+  this.ex = this.x + Math.cos(this.direction) * this.size;
+  this.ey = this.y + Math.sin(this.direction) * this.size;
   $.particleEmitters.push(
     new $.ParticleEmitter({
-      x: this.x,
-      y: this.y,
+      x: this.ex,
+      y: this.ey,
       count: 2,
       spawnRange: 1,
       friction: 0.75,
       minSpeed: 2,
       maxSpeed: 10,
-      minDirection: 0,
-      maxDirection: $.tau,
+      minDirection: this.direction - 0.7,
+      maxDirection: this.direction + 0.7,
       hue: this.hue,
       saturation: this.saturation,
     })
