@@ -6,17 +6,17 @@ $.audio.sounds = {
   explosion: [
     new Howl({
       src: ["./sounds/explosion-0.webm", "./sounds/explosion-0.mp3"],
-      volume: 0.75,
+      volume: 0.85,
     }),
     new Howl({
       src: ["./sounds/explosion-1.webm", "./sounds/explosion-1.mp3"],
-      volume: 0.75,
+      volume: 0.85,
     }),
   ],
   explosionAlt: [
     new Howl({
       src: ["./sounds/explosionAlt-0.webm", "./sounds/explosionAlt-0.mp3"],
-      volume: 0.5,
+      volume: 0.7,
     }),
   ],
   hit: [
@@ -31,7 +31,7 @@ $.audio.sounds = {
   powerup: [
     new Howl({
       src: ["./sounds/powerup-0.webm", "./sounds/powerup-0.mp3"],
-      volume: 0.5,
+      volume: 0.7,
     }),
   ],
   shoot: [
