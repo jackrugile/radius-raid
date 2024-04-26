@@ -455,25 +455,25 @@ Powerups
 $.definitions.powerups = [
   {
     title: "HEALTH PACK",
-    hue: 0,
-    saturation: 0,
-    lightness: 100,
+    hue: 60,
+    saturation: 100,
+    lightness: 60,
   },
   {
     title: "SLOW ENEMIES",
-    hue: 200,
-    saturation: 0,
-    lightness: 100,
+    hue: 170,
+    saturation: 100,
+    lightness: 60,
   },
   {
     title: "FAST SHOT",
-    hue: 100,
+    hue: 120,
     saturation: 100,
     lightness: 60,
   },
   {
     title: "TRIPLE SHOT",
-    hue: 200,
+    hue: 210,
     saturation: 100,
     lightness: 60,
   },

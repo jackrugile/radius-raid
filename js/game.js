@@ -483,7 +483,7 @@ $.renderInterface = function () {
     Slow Enemies Screen Cover
     ==============================================================================*/
   if ($.powerupTimers[1] > 0) {
-    $.ctxmg.fillStyle = "hsla(200, 100%, 20%, 0.1)";
+    $.ctxmg.fillStyle = "hsla(170, 100%, 20%, 0.1)";
     $.ctxmg.fillRect(0, 0, $.cw, $.ch);
   }
 

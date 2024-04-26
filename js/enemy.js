@@ -217,7 +217,7 @@ $.Enemy.prototype.render = function (i) {
         this.x,
         this.y,
         this.radius,
-        "hsla(" + $.util.rand(160, 220) + ", 100%, 50%, 0.25)"
+        "hsla(170, 100%, 50%, 0.25)"
       );
     }
     if (this.hitFlag > 0) {

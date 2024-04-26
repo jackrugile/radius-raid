@@ -299,12 +299,21 @@ $.Hero.prototype.render = function () {
       $.ctxmg.fillRect(-$.screen.x, -$.screen.y, $.cw, $.ch);
     } else if (this.weapon.fireFlag > 0) {
       this.weapon.fireFlag -= $.dt;
-      fillStyle =
-        "hsla(" +
-        $.util.rand(0, 360) +
-        ", 100%, " +
-        $.util.rand(20, 80) +
-        "%, 1)";
+      if (
+        $.powerupTimers[2] > 0 ||
+        $.powerupTimers[3] > 0 ||
+        $.powerupTimers[4] > 0
+      ) {
+        fillStyle =
+          "hsla(" + $.tick * 30 + ", 100%, " + $.util.rand(50, 80) + "%, 1)";
+      } else {
+        fillStyle =
+          "hsla(" +
+          $.util.rand(0, 360) +
+          ", 100%, " +
+          $.util.rand(20, 80) +
+          "%, 1)";
+      }
     }
 
     $.ctxmg.save();
@@ -351,9 +360,7 @@ $.Hero.prototype.render = function () {
         $.util.rand(0, 359) +
         ", 100%, " +
         $.util.rand(20, 80) +
-        "%, " +
-        $.util.rand(0.5, 1) +
-        ")";
+        "%, 1)";
       $.ctxmg.stroke();
     }
   }
