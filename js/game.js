@@ -1051,12 +1051,14 @@ $.updatePowerupTimers = function () {
       $.hero.life = 1;
     }
     $.powerupTimers[0] -= $.dt;
+    $.powerupTimers[0] = Math.max($.powerupTimers[0], 0);
   }
 
   // SLOW ENEMIES
   if ($.powerupTimers[1] > 0) {
     $.slow = 1;
     $.powerupTimers[1] -= $.dt;
+    $.powerupTimers[1] = Math.max($.powerupTimers[1], 0);
   } else {
     $.slow = 0;
   }
@@ -1066,6 +1068,7 @@ $.updatePowerupTimers = function () {
     $.hero.weapon.fireRateMax = 2;
     $.hero.weapon.bullet.speed = 14;
     $.powerupTimers[2] -= $.dt;
+    $.powerupTimers[2] = Math.max($.powerupTimers[2], 0);
   } else {
     $.hero.weapon.fireRateMax = 5;
     $.hero.weapon.bullet.speed = 10;
@@ -1075,6 +1078,7 @@ $.updatePowerupTimers = function () {
   if ($.powerupTimers[3] > 0) {
     $.hero.weapon.count = 3;
     $.powerupTimers[3] -= $.dt;
+    $.powerupTimers[3] = Math.max($.powerupTimers[3], 0);
   } else {
     $.hero.weapon.count = 1;
   }
@@ -1083,13 +1087,21 @@ $.updatePowerupTimers = function () {
   if ($.powerupTimers[4] > 0) {
     $.hero.weapon.bullet.piercing = 1;
     $.powerupTimers[4] -= $.dt;
+    $.powerupTimers[4] = Math.max($.powerupTimers[4], 0);
   } else {
     $.hero.weapon.bullet.piercing = 0;
   }
 };
 
 $.spawnPowerup = function (x, y) {
-  if (Math.random() < 0.1) {
+  let maxPowerups = 10;
+  let chance = 0.1;
+  let totalPowerupsActive = $.powerupTimers.reduce((acc, curr) => {
+    return acc + (curr > 0 ? 1 : 0);
+  }, 0);
+  chance -= totalPowerupsActive * 0.02;
+
+  if ($.powerups.length < maxPowerups && Math.random() < chance) {
     let min = $.hero.life < 0.9 ? 0 : 1;
     let type = Math.floor($.util.rand(min, $.definitions.powerups.length));
     let params = $.definitions.powerups[type];
