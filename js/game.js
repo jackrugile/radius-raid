@@ -1027,10 +1027,6 @@ $.updateLevel = function () {
     } else {
       $.level.current++;
       $.level.kills = 0;
-      // no more level definitions, so take the last level and increase the spawn rate slightly
-      //for( let i = 0; i < $.level.distributionCount; i++ ) {
-      //$.level.distribution[ i ] = Math.max( 1, $.level.distribution[ i ] - 5 );
-      //}
     }
     $.levelDiffOffset = $.level.current + 1 - $.levelCount;
     $.levelPops.push(

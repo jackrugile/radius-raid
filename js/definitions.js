@@ -207,7 +207,7 @@ $.definitions.enemies = [
     // Enemy 7 - small weak speedy
     value: 40,
     speed: 2.5,
-    life: 1,
+    life: 2,
     radius: 15,
     hue: 300,
     behavior: function () {
@@ -281,7 +281,7 @@ $.definitions.enemies = [
     value: 50,
     speed: 0.5,
     angleSpeed: 0.015,
-    life: 2,
+    life: 3,
     radius: 20,
     hue: 60,
     setup: function () {
@@ -312,7 +312,7 @@ $.definitions.enemies = [
     // Enemy 10 - spawner
     value: 55,
     speed: 1,
-    life: 3,
+    life: 4,
     radius: 45,
     hue: 0,
     canSpawn: 1,
@@ -381,7 +381,7 @@ $.definitions.enemies = [
     // Enemy 12 - speedy random direction, no homing
     value: 65,
     speed: 6,
-    life: 1,
+    life: 2,
     radius: 5,
     hue: 0,
     lockBounds: 1,
@@ -432,7 +432,7 @@ $.definitions.enemies = [
 Levels
 ==============================================================================*/
 $.definitions.levels = [];
-let base = 25;
+let base = 20;
 for (let i = 0; i < $.definitions.enemies.length; i++) {
   let distribution = [];
   for (let di = 0; di < i + 1; di++) {
@@ -444,7 +444,7 @@ for (let i = 0; i < $.definitions.enemies.length; i++) {
     });
   }
   $.definitions.levels.push({
-    killsToLevel: 10 + (i + 1) * 7,
+    killsToLevel: 5 + (i + 1) * 7,
     distribution: distribution,
   });
 }
