@@ -317,7 +317,7 @@ $.definitions.enemies = [
     hue: 0,
     canSpawn: 1,
     spawnTick: 0,
-    spawnMax: 250,
+    spawnTickMax: 250,
     behavior: function () {
       let speed = this.speed;
       if ($.slow) {
@@ -332,10 +332,10 @@ $.definitions.enemies = [
       this.vy = Math.sin(direction) * speed;
 
       if (this.canSpawn) {
-        if (this.spawnTick < this.spawnMax) {
+        if (this.spawnTick < this.spawnTickMax) {
           this.spawnTick += $.dt;
         } else {
-          this.spawnTick = 0;
+          this.spawnTick = this.spawnTick - this.spawnTickMax + $.dt;
           let enemy = $.spawnEnemy(this.type);
           enemy.radius = 20;
           enemy.canSpawn = 0;
