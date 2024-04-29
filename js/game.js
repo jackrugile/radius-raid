@@ -225,6 +225,11 @@ $.renderFavicon = function () {
       }
     }
   }
+  favctx.fillStyle =
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "#fff"
+      : "#000";
   favctx.fill();
   favicon.href = favc.toDataURL();
 };
