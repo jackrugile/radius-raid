@@ -457,7 +457,7 @@ $.renderInterface = function () {
       ctx: $.ctxmg,
       x: $.cw / 2 + 10,
       y: $.ch - 20,
-      text: "WASD/ARROWS\nMOUSE\nP\nM",
+      text: "WASD/ARROWS\nMOUSE\nP/ESC\nM",
       hspacing: 1,
       vspacing: 17,
       halign: "left",
