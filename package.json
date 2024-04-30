@@ -1,7 +1,8 @@
 {
   "name": "radius-raid",
-  "description": "Jack Rugile's Portfolio Website",
+  "description": "Radius Raid is a space themed shoot 'em up where you must blast away unrelenting enemies before they destroy you. The game features 13 enemy types, 5 powerups, parallax backgrounds, retro sound effects, and locally stored stats.",
   "repository": "https://github.com/jackrugile/radius-raid.git",
+  "homepage": "https://jackrugile.com/radius-raid/",
   "author": "Jack Rugile <jack@jackrugile.com> (https://jackrugile.com)",
   "license": "MIT",
   "scripts": {
