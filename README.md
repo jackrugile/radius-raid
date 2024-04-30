@@ -2,6 +2,8 @@
 
 Radius Raid is a space themed shoot 'em up where you must blast away unrelenting enemies before they destroy you. The game features 13 enemy types, 5 powerups, parallax backgrounds, retro sound effects, and locally stored stats.
 
+[**Play Radius Raid**](https://jackrugile.com/radius-raid/)
+
 This was originally an entry for [js13kGames](http://js13kgames.com) 2013, but has since received a few updates and bug fixes. It won [1st place](https://2013.js13kgames.com/#winners)!
 
 # Controls
