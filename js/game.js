@@ -865,17 +865,11 @@ $.mousescreen = function () {
 };
 
 $.mousedowncb = function (e) {
-  e.preventDefault();
-  if (e.button === 0) {
-    $.mouse.down = 1;
-  }
+  $.mouse.down = 1;
 };
 
 $.mouseupcb = function (e) {
-  e.preventDefault();
-  if (e.button === 0) {
-    $.mouse.down = 0;
-  }
+  $.mouse.down = 0;
 };
 
 $.keydowncb = function (e) {
