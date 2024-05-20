@@ -945,6 +945,10 @@ $.resizecb = function (e) {
 
 $.blurcb = function () {
   if ($.state == "play") {
+    $.keys.state.up = 0;
+    $.keys.state.right = 0;
+    $.keys.state.down = 0;
+    $.keys.state.left = 0;
     $.setState("pause");
   }
 };
