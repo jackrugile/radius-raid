@@ -323,7 +323,7 @@ $.refreshStaticBackgrounds = function () {
     $.cbg2.style.visibility = "visible";
     $.cbg3.style.visibility = "visible";
     $.cbg4.style.visibility = "visible";
-  }, 100);
+  }, 0);
 };
 
 /*==============================================================================
@@ -952,7 +952,9 @@ $.blurcb = function () {
 $.focuscb = function () {};
 
 $.visibilitychangecb = function () {
-  $.refreshStaticBackgrounds();
+  if (document.visibilityState === "visible") {
+    $.refreshStaticBackgrounds();
+  }
 };
 
 $.contextmenucb = function (e) {
