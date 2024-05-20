@@ -314,16 +314,10 @@ $.renderBackground4 = function () {
 };
 
 $.refreshStaticBackgrounds = function () {
-  $.cbg1.style.visibility = "hidden";
-  $.cbg2.style.visibility = "hidden";
-  $.cbg3.style.visibility = "hidden";
-  $.cbg4.style.visibility = "hidden";
-  window.setTimeout(() => {
-    $.cbg1.style.visibility = "visible";
-    $.cbg2.style.visibility = "visible";
-    $.cbg3.style.visibility = "visible";
-    $.cbg4.style.visibility = "visible";
-  }, 0);
+  [$.ctxbg1, $.ctxbg2, $.ctxbg3, $.ctxbg4].forEach((ctx) => {
+    ctx.fillStyle = "transparent";
+    ctx.fillRect(0, 0, 1, 1);
+  });
 };
 
 /*==============================================================================
