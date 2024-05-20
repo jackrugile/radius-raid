@@ -313,6 +313,19 @@ $.renderBackground4 = function () {
   }
 };
 
+$.refreshStaticBackgrounds = function () {
+  $.cbg1.style.visibility = "hidden";
+  $.cbg2.style.visibility = "hidden";
+  $.cbg3.style.visibility = "hidden";
+  $.cbg4.style.visibility = "hidden";
+  window.setTimeout(() => {
+    $.cbg1.style.visibility = "visible";
+    $.cbg2.style.visibility = "visible";
+    $.cbg3.style.visibility = "visible";
+    $.cbg4.style.visibility = "visible";
+  }, 100);
+};
+
 /*==============================================================================
 Render Foreground
 ==============================================================================*/
@@ -936,6 +949,12 @@ $.blurcb = function () {
   }
 };
 
+$.focuscb = function () {};
+
+$.visibilitychangecb = function () {
+  $.refreshStaticBackgrounds();
+};
+
 $.contextmenucb = function (e) {
   e.preventDefault();
 };
@@ -948,6 +967,8 @@ $.bindEvents = function () {
   window.addEventListener("keyup", $.keyupcb);
   window.addEventListener("resize", $.resizecb);
   window.addEventListener("blur", $.blurcb);
+  window.addEventListener("focus", $.focuscb);
+  document.addEventListener("visibilitychange", $.visibilitychangecb);
   window.addEventListener("contextmenu", $.contextmenucb);
 };
 
