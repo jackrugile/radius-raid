@@ -675,7 +675,7 @@ $.renderMinimap = function () {
       $.ctxmg.rect(x, y, 2, 2);
     }
   }
-  $.ctxmg.fillStyle = "#f00";
+  $.ctxmg.fillStyle = "hsl(0, 100%, 60%)";
   $.ctxmg.fill();
 
   $.ctxmg.beginPath();
@@ -1077,7 +1077,8 @@ $.setState = function (state) {
 
     let playButton = new $.Button({
       x: $.cw / 2 + 1,
-      y: $.ch / 2 - 24,
+      // y: $.ch / 2 + 26,
+      y: $.ch - 174,
       lockedWidth: 299,
       lockedHeight: 49,
       scale: 3,
@@ -1287,6 +1288,44 @@ $.setupStates = function () {
     $.clearScreen();
     $.updateScreen();
 
+    let stripeRed = "hsla(0, 100%, 60%, 1)";
+    let stripeGreen = "hsla(120, 100%, 60%, 1)";
+    let stripeBlue = "hsla(210, 100%, 60%, 1)";
+    let stripeWidth = 21;
+    let set1h = 125;
+    let set1y = 0;
+    let set2h = 100;
+    let set2y = 275;
+    let set3h = 25;
+    let set3y = $.ch - set3h;
+
+    $.ctxmg.fillStyle = stripeRed;
+    $.ctxmg.fillRect($.cw / 2 - 35, 0, stripeWidth, set1h);
+
+    $.ctxmg.fillStyle = stripeGreen;
+    $.ctxmg.fillRect($.cw / 2 - 10, 0, stripeWidth, set1h);
+
+    $.ctxmg.fillStyle = stripeBlue;
+    $.ctxmg.fillRect($.cw / 2 + 15, 0, stripeWidth, set1h);
+
+    $.ctxmg.fillStyle = stripeRed;
+    $.ctxmg.fillRect($.cw / 2 - 35, set2y, stripeWidth, set2h);
+
+    $.ctxmg.fillStyle = stripeGreen;
+    $.ctxmg.fillRect($.cw / 2 - 10, set2y, stripeWidth, set2h);
+
+    $.ctxmg.fillStyle = stripeBlue;
+    $.ctxmg.fillRect($.cw / 2 + 15, set2y, stripeWidth, set2h);
+
+    $.ctxmg.fillStyle = stripeRed;
+    $.ctxmg.fillRect($.cw / 2 - 35, set3y, stripeWidth, set3h);
+
+    $.ctxmg.fillStyle = stripeGreen;
+    $.ctxmg.fillRect($.cw / 2 - 10, set3y, stripeWidth, set3h);
+
+    $.ctxmg.fillStyle = stripeBlue;
+    $.ctxmg.fillRect($.cw / 2 + 15, set3y, stripeWidth, set3h);
+
     let i = $.buttons.length;
     while (i--) {
       $.buttons[i].update(i);
@@ -1297,45 +1336,20 @@ $.setupStates = function () {
     }
 
     $.ctxmg.beginPath();
-    let title = $.text({
+    let title1 = $.text({
       ctx: $.ctxmg,
       x: $.cw / 2,
-      y: $.ch / 2 - 100,
-      text: "RADIUS RAID",
-      hspacing: 2,
-      vspacing: 1,
+      y: $.ch / 2 - 48,
+      text: "RADIUS\nRAID",
+      hspacing: 4,
+      vspacing: 4,
       halign: "center",
       valign: "bottom",
       scale: 10,
       snap: 1,
       render: 1,
     });
-    gradient = $.ctxmg.createLinearGradient(
-      title.sx,
-      title.sy,
-      title.sx,
-      title.ey
-    );
-    gradient.addColorStop(0, "#fff");
-    gradient.addColorStop(1, "#999");
-    $.ctxmg.fillStyle = gradient;
-    $.ctxmg.fill();
-
-    $.ctxmg.beginPath();
-    let bottomInfo = $.text({
-      ctx: $.ctxmg,
-      x: $.cw / 2,
-      y: $.ch - 172,
-      text: "MADE BY JACK RUGILE",
-      hspacing: 1,
-      vspacing: 1,
-      halign: "center",
-      valign: "bottom",
-      scale: 2,
-      snap: 1,
-      render: 1,
-    });
-    $.ctxmg.fillStyle = "#666";
+    $.ctxmg.fillStyle = "#fff";
     $.ctxmg.fill();
   };
 
@@ -1348,7 +1362,7 @@ $.setupStates = function () {
       x: $.cw / 2,
       y: 150,
       text: "STATS",
-      hspacing: 3,
+      hspacing: 4,
       vspacing: 1,
       halign: "center",
       valign: "bottom",
@@ -1356,15 +1370,7 @@ $.setupStates = function () {
       snap: 1,
       render: 1,
     });
-    let gradient = $.ctxmg.createLinearGradient(
-      statsTitle.sx,
-      statsTitle.sy,
-      statsTitle.sx,
-      statsTitle.ey
-    );
-    gradient.addColorStop(0, "#fff");
-    gradient.addColorStop(1, "#999");
-    $.ctxmg.fillStyle = gradient;
+    $.ctxmg.fillStyle = "#fff";
     $.ctxmg.fill();
 
     $.ctxmg.beginPath();
@@ -1437,7 +1443,7 @@ $.setupStates = function () {
       x: $.cw / 2,
       y: 100,
       text: "CREDITS",
-      hspacing: 3,
+      hspacing: 4,
       vspacing: 1,
       halign: "center",
       valign: "bottom",
@@ -1445,15 +1451,7 @@ $.setupStates = function () {
       snap: 1,
       render: 1,
     });
-    let gradient = $.ctxmg.createLinearGradient(
-      creditsTitle.sx,
-      creditsTitle.sy,
-      creditsTitle.sx,
-      creditsTitle.ey
-    );
-    gradient.addColorStop(0, "#fff");
-    gradient.addColorStop(1, "#999");
-    $.ctxmg.fillStyle = gradient;
+    $.ctxmg.fillStyle = "#fff";
     $.ctxmg.fill();
 
     $.ctxmg.beginPath();
@@ -1461,7 +1459,7 @@ $.setupStates = function () {
       ctx: $.ctxmg,
       x: $.cw / 2 - 10,
       y: creditsTitle.ey + 49,
-      text: "CREATED FOR JS13KGAMES BY\nINSPIRATION AND SUPPORT\n\nAUDIO PROCESSING\nGAME INSPIRATION AND IDEAS\n\nHTML5 CANVAS REFERENCE\n\nGAME MATH REFERENCE",
+      text: "CREATED BY\nINSPIRATION AND SUPPORT\n\nAUDIO PROCESSING\nGAME INSPIRATION AND IDEAS\n\nHTML5 CANVAS REFERENCE\n\nGAME MATH REFERENCE",
       hspacing: 1,
       vspacing: 17,
       halign: "right",
@@ -1666,7 +1664,7 @@ $.setupStates = function () {
       x: $.cw / 2,
       y: $.ch / 2 - 50,
       text: "PAUSED",
-      hspacing: 3,
+      hspacing: 4,
       vspacing: 1,
       halign: "center",
       valign: "bottom",
@@ -1674,15 +1672,7 @@ $.setupStates = function () {
       snap: 1,
       render: 1,
     });
-    let gradient = $.ctxmg.createLinearGradient(
-      pauseText.sx,
-      pauseText.sy,
-      pauseText.sx,
-      pauseText.ey
-    );
-    gradient.addColorStop(0, "#fff");
-    gradient.addColorStop(1, "#999");
-    $.ctxmg.fillStyle = gradient;
+    $.ctxmg.fillStyle = "#fff";
     $.ctxmg.fill();
 
     let i = $.buttons.length;
@@ -1718,7 +1708,7 @@ $.setupStates = function () {
       x: $.cw / 2,
       y: 150,
       text: "GAME OVER",
-      hspacing: 3,
+      hspacing: 4,
       vspacing: 1,
       halign: "center",
       valign: "bottom",
@@ -1726,15 +1716,7 @@ $.setupStates = function () {
       snap: 1,
       render: 1,
     });
-    let gradient = $.ctxmg.createLinearGradient(
-      gameoverTitle.sx,
-      gameoverTitle.sy,
-      gameoverTitle.sx,
-      gameoverTitle.ey
-    );
-    gradient.addColorStop(0, "#f22");
-    gradient.addColorStop(1, "#b00");
-    $.ctxmg.fillStyle = gradient;
+    $.ctxmg.fillStyle = "hsl(0, 100%, 60%)";
     $.ctxmg.fill();
 
     $.ctxmg.beginPath();
