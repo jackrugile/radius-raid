@@ -42,10 +42,10 @@ $.Button.prototype.update = function (i) {
     $.util.pointInRect(
       $.mouse.sx,
       $.mouse.sy,
-      this.sx,
-      this.sy,
-      this.width,
-      this.height
+      this.sx * $.gameScale,
+      this.sy * $.gameScale,
+      this.width * $.gameScale,
+      this.height * $.gameScale
     )
   ) {
     this.hovering = 1;

@@ -8,58 +8,60 @@
     />
     <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
       body {
-        background: #080808;
+        align-items: center;
+        background-color: #000;
+        cursor: crosshair;
+        display: flex;
+        height: 100vh;
+        justify-content: center;
+        overflow: hidden;
       }
 
       #wrap {
-        background: #222;
-        box-shadow: inset 0 0 0 1px #404040, 0 0 0 1px #000;
-        left: 50%;
+        background: #000;
+        box-shadow: 0 0 0 1px #222;
         opacity: 0;
-        padding: 10px;
-        position: absolute;
-        top: 50%;
-        transition: opacity 1.5s;
+        overflow: hidden;
+        position: relative;
+        transition: opacity 1000ms;
       }
 
       .loaded #wrap {
         opacity: 1;
       }
 
-      #wrap-inner {
-        background: #000;
-        overflow: hidden;
-        position: relative;
-      }
-
-      canvas {
-        cursor: crosshair;
-        display: block;
-        left: 0;
-        position: absolute;
-        top: 0;
-      }
-
       #cbg1,
       #cbg2,
       #cbg3,
-      #cbg4,
-      #cfg {
+      #cbg4 {
+        left: 0;
+        position: absolute;
+        top: 0;
         pointer-events: none;
+        /* image-rendering: pixelated; */
+      }
+
+      #cmg {
+        cursor: crosshair;
+        display: block;
+        position: relative;
+        /* image-rendering: pixelated; */
       }
     </style>
   </head>
   <body>
     <div id="wrap">
-      <div id="wrap-inner">
-        <canvas id="cbg1"></canvas>
-        <canvas id="cbg2"></canvas>
-        <canvas id="cbg3"></canvas>
-        <canvas id="cbg4"></canvas>
-        <canvas id="cmg"></canvas>
-        <canvas id="cfg"></canvas>
-      </div>
+      <canvas id="cbg1"></canvas>
+      <canvas id="cbg2"></canvas>
+      <canvas id="cbg3"></canvas>
+      <canvas id="cbg4"></canvas>
+      <canvas id="cmg"></canvas>
     </div>
     <script>
       let $ = {};

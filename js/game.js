@@ -4,27 +4,27 @@ Init
 $.init = function () {
   $.setupStorage();
   $.wrap = document.getElementById("wrap");
-  $.wrapInner = document.getElementById("wrap-inner");
   $.cbg1 = document.getElementById("cbg1");
   $.cbg2 = document.getElementById("cbg2");
   $.cbg3 = document.getElementById("cbg3");
   $.cbg4 = document.getElementById("cbg4");
   $.cmg = document.getElementById("cmg");
-  $.cfg = document.getElementById("cfg");
   $.ctxbg1 = $.cbg1.getContext("2d");
   $.ctxbg2 = $.cbg2.getContext("2d");
   $.ctxbg3 = $.cbg3.getContext("2d");
   $.ctxbg4 = $.cbg4.getContext("2d");
   $.ctxmg = $.cmg.getContext("2d");
-  $.ctxfg = $.cfg.getContext("2d");
-  $.cw = $.cmg.width = $.cfg.width = 800;
-  $.ch = $.cmg.height = $.cfg.height = 600;
-  $.wrap.style.width = $.wrapInner.style.width = $.cw + "px";
-  $.wrap.style.height = $.wrapInner.style.height = $.ch + "px";
-  $.wrap.style.marginLeft = -$.cw / 2 - 10 + "px";
-  $.wrap.style.marginTop = -$.ch / 2 - 10 + "px";
+  $.cw = 800;
+  $.ch = 600;
+  $.cmg.width = 800;
+  $.cmg.height = 600;
+  $.cratio = $.cw / $.ch;
+  $.wrap.style.width = $.cw + "px";
+  $.wrap.style.height = $.ch + "px";
   $.ww = Math.floor($.cw * 2);
   $.wh = Math.floor($.ch * 2);
+  $.gameScale = 1;
+  $.shouldScale = 0;
   $.cbg1.width = Math.floor($.cw * 1.1);
   $.cbg1.height = Math.floor($.ch * 1.1);
   $.cbg2.width = Math.floor($.cw * 1.15);
@@ -50,6 +50,7 @@ $.init = function () {
       right: 0,
       m: 0,
       p: 0,
+      f: 0,
       esc: 0,
     },
     pressed: {
@@ -59,6 +60,7 @@ $.init = function () {
       right: 0,
       m: 0,
       p: 0,
+      f: 0,
       esc: 0,
     },
   };
@@ -114,7 +116,6 @@ $.init = function () {
   $.renderBackground2();
   $.renderBackground3();
   $.renderBackground4();
-  $.renderForeground();
   $.setState("menu");
   $.loop();
 };
@@ -273,41 +274,6 @@ $.refreshStaticBackgrounds = function () {
     ctx.fillStyle = "transparent";
     ctx.fillRect(0, 0, 1, 1);
   });
-};
-
-/*==============================================================================
-Render Foreground
-==============================================================================*/
-$.renderForeground = function () {
-  let gradient = $.ctxfg.createRadialGradient(
-    $.cw / 2,
-    $.ch / 2,
-    $.ch / 3,
-    $.cw / 2,
-    $.ch / 2,
-    $.ch
-  );
-  gradient.addColorStop(0, "hsla(0, 0%, 0%, 0)");
-  gradient.addColorStop(1, "hsla(0, 0%, 0%, 0.5)");
-  $.ctxfg.fillStyle = gradient;
-  $.ctxfg.fillRect(0, 0, $.cw, $.ch);
-
-  $.ctxfg.fillStyle = "hsla(0, 0%, 50%, 0.1)";
-  let i = Math.round($.ch / 2);
-  while (i--) {
-    $.ctxfg.fillRect(0, i * 2, $.cw, 1);
-  }
-
-  let gradient2 = $.ctxfg.createLinearGradient($.cw, 0, 0, $.ch);
-  gradient2.addColorStop(0, "hsla(0, 0%, 100%, 0.04)");
-  gradient2.addColorStop(0.75, "hsla(0, 0%, 100%, 0)");
-  $.ctxfg.beginPath();
-  $.ctxfg.moveTo(0, 0);
-  $.ctxfg.lineTo($.cw, 0);
-  $.ctxfg.lineTo(0, $.ch);
-  $.ctxfg.closePath();
-  $.ctxfg.fillStyle = gradient2;
-  $.ctxfg.fill();
 };
 
 /*==============================================================================
@@ -685,38 +651,17 @@ $.renderMinimap = function () {
 
   $.ctxmg.fillStyle = "hsla(0, 0%, 100%, 0.1)";
   $.ctxmg.fillRect(
-    Math.floor($.minimap.x + -$.screen.x * $.minimap.scale),
-    Math.floor($.minimap.y + -$.screen.y * $.minimap.scale),
-    Math.floor($.cw * $.minimap.scale),
-    Math.floor($.ch * $.minimap.scale)
+    $.minimap.x + -$.screen.x * $.minimap.scale,
+    $.minimap.y + -$.screen.y * $.minimap.scale,
+    $.cw * $.minimap.scale,
+    $.ch * $.minimap.scale
   );
 
-  //$.ctxmg.beginPath();
+  $.ctxmg.beginPath();
   for (let i = 0; i < $.enemies.length; i++) {
     let enemy = $.enemies[i];
-    let x = $.minimap.x + Math.floor(enemy.x * $.minimap.scale);
-    let y = $.minimap.y + Math.floor(enemy.y * $.minimap.scale);
-    if (
-      $.util.pointInRect(
-        x + 1,
-        y + 1,
-        $.minimap.x,
-        $.minimap.y,
-        $.minimap.width,
-        $.minimap.height
-      )
-    ) {
-      $.ctxmg.fillStyle =
-        "hsl(" + enemy.hue + ", " + enemy.saturation + "%, 50%)";
-      $.ctxmg.fillRect(x, y, 2, 2);
-    }
-  }
-
-  $.ctxmg.beginPath();
-  for (let i = 0; i < $.bullets.length; i++) {
-    let bullet = $.bullets[i];
-    let x = $.minimap.x + Math.floor(bullet.x * $.minimap.scale);
-    let y = $.minimap.y + Math.floor(bullet.y * $.minimap.scale);
+    let x = $.minimap.x + enemy.x * $.minimap.scale;
+    let y = $.minimap.y + enemy.y * $.minimap.scale;
     if (
       $.util.pointInRect(
         x,
@@ -727,16 +672,26 @@ $.renderMinimap = function () {
         $.minimap.height
       )
     ) {
-      $.ctxmg.rect(x, y, 1, 1);
+      $.ctxmg.rect(x, y, 2, 2);
     }
+  }
+  $.ctxmg.fillStyle = "#f00";
+  $.ctxmg.fill();
+
+  $.ctxmg.beginPath();
+  for (let i = 0; i < $.bullets.length; i++) {
+    let bullet = $.bullets[i];
+    let x = $.minimap.x + bullet.x * $.minimap.scale;
+    let y = $.minimap.y + bullet.y * $.minimap.scale;
+    $.ctxmg.rect(x, y, 1, 1);
   }
   $.ctxmg.fillStyle = "#fff";
   $.ctxmg.fill();
 
   $.ctxmg.fillStyle = $.hero.fillStyle;
   $.ctxmg.fillRect(
-    $.minimap.x + Math.floor($.hero.x * $.minimap.scale),
-    $.minimap.y + Math.floor($.hero.y * $.minimap.scale),
+    $.minimap.x + $.hero.x * $.minimap.scale,
+    $.minimap.y + $.hero.y * $.minimap.scale,
     2,
     2
   );
@@ -822,8 +777,8 @@ $.mousemovecb = function (e) {
 $.mousescreen = function () {
   $.mouse.sx = $.mouse.ax - $.cOffset.left;
   $.mouse.sy = $.mouse.ay - $.cOffset.top;
-  $.mouse.x = $.mouse.sx - $.screen.x;
-  $.mouse.y = $.mouse.sy - $.screen.y;
+  $.mouse.x = $.mouse.sx / $.gameScale - $.screen.x;
+  $.mouse.y = $.mouse.sy / $.gameScale - $.screen.y;
 };
 
 $.mousedowncb = function (e) {
@@ -854,6 +809,9 @@ $.keydowncb = function (e) {
   if (e === 80) {
     $.keys.state.p = 1;
   }
+  if (e === 70) {
+    $.keys.state.f = 1;
+  }
   if (e === 27) {
     $.keys.state.esc = 1;
   }
@@ -879,17 +837,33 @@ $.keyupcb = function (e) {
   if (e === 80) {
     $.keys.state.p = 0;
   }
+  if (e === 70) {
+    $.keys.state.f = 0;
+  }
   if (e === 27) {
     $.keys.state.esc = 0;
   }
 };
 
 $.resizecb = function (e) {
-  let rect = $.cmg.getBoundingClientRect();
-  $.cOffset = {
-    left: rect.left,
-    top: rect.top,
-  };
+  let winWidth = window.innerWidth;
+  let winHeight = window.innerHeight;
+  let winRatio = winWidth / winHeight;
+  if (winRatio > $.cratio) {
+    $.gameScale = winHeight / $.ch;
+  } else {
+    $.gameScale = winWidth / $.cw;
+  }
+  $.gameScale = $.shouldScale ? $.gameScale : 1;
+  $.wrap.style.transform = `scale(${$.gameScale})`;
+
+  window.setTimeout(() => {
+    let rect = $.cmg.getBoundingClientRect();
+    $.cOffset = {
+      left: rect.left,
+      top: rect.top,
+    };
+  }, 0);
 };
 
 $.blurcb = function () {
@@ -1827,6 +1801,12 @@ $.loop = function () {
 
   // run the current state
   $.states[$.state]();
+
+  // listen for scale
+  if ($.keys.pressed.f) {
+    $.shouldScale = !$.shouldScale;
+    $.resizecb();
+  }
 
   // always listen for mute toggle
   if ($.keys.pressed.m) {
