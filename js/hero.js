@@ -14,6 +14,8 @@ $.Hero = function () {
   this.life = 1;
   this.particleEmitterTickMax = 1;
   this.particleEmitterTick = this.particleEmitterTickMax;
+  this.particleEmitterSpeedTickMax = 1;
+  this.particleEmitterSpeedTick = this.particleEmitterSpeedTickMax;
   this.takingDamage = 0;
   this.takingDamageAudioTickMax = 8;
   this.takingDamageAudioTick = this.takingDamageAudioTickMax;
@@ -113,24 +115,31 @@ $.Hero.prototype.update = function () {
     this.vy += (0 - this.vy) * (1 - Math.exp(-0.15 * $.dt));
   }
 
+  if (this.particleEmitterSpeedTick < this.particleEmitterSpeedTickMax) {
+    this.particleEmitterSpeedTick += $.dt;
+  }
+
   if (!$.mouse.down && (Math.abs(this.vx) > 1 || Math.abs(this.vy) > 1)) {
     let dir = Math.atan2(this.vy, this.vx) + $.pi;
     let max = Math.max(Math.abs(this.vx), Math.abs(this.vy));
-    $.particleEmitters.push(
-      new $.ParticleEmitter({
-        x: this.x + Math.cos(dir) * this.radius * 2,
-        y: this.y + Math.sin(dir) * this.radius * 2,
-        count: 1,
-        spawnRange: this.radius * 1.25,
-        friction: 0.7,
-        minSpeed: max * 1,
-        maxSpeed: max * 2,
-        minDirection: dir - 0.1,
-        maxDirection: dir + 0.1,
-        hue: 0,
-        saturation: 0,
-      })
-    );
+    if (this.particleEmitterSpeedTick >= this.particleEmitterSpeedTickMax) {
+      this.particleEmitterSpeedTick = 0;
+      $.particleEmitters.push(
+        new $.ParticleEmitter({
+          x: this.x + Math.cos(dir) * this.radius * 2,
+          y: this.y + Math.sin(dir) * this.radius * 2,
+          count: 2,
+          spawnRange: this.radius * 1.25,
+          friction: 0.7,
+          minSpeed: max * 1,
+          maxSpeed: max * 2,
+          minDirection: dir - 0.1,
+          maxDirection: dir + 0.1,
+          hue: 0,
+          saturation: 0,
+        })
+      );
+    }
   }
 
   /*==============================================================================
