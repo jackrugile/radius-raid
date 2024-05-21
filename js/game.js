@@ -115,7 +115,6 @@ $.init = function () {
   $.renderBackground3();
   $.renderBackground4();
   $.renderForeground();
-  $.renderFavicon();
   $.setState("menu");
   $.loop();
 };
@@ -188,50 +187,6 @@ $.reset = function () {
       level: 1,
     })
   );
-};
-
-/*==============================================================================
-Create Favicon
-==============================================================================*/
-$.renderFavicon = function () {
-  let favicon = document.getElementById("favicon");
-  let favc = document.createElement("canvas");
-  let favctx = favc.getContext("2d");
-  // prettier-ignore
-  let faviconGrid = [
-    [ 1, 1, 1, 1, 1,  ,  , 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
-    [ 1,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , 1 ],
-    [ 1,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , 1 ],
-    [ 1,  ,  ,  ,  , 1, 1,  ,  , 1, 1, 1, 1, 1,  , 0 ],
-    [ 1,  ,  ,  ,  , 1, 1,  ,  , 1, 1, 1, 1, 1,  , 0 ],
-    [ 1,  ,  ,  ,  , 1, 1,  ,  , 1, 1,  ,  ,  ,  , 1 ],
-    [ 1,  ,  ,  ,  , 1, 1,  ,  , 1, 1,  ,  ,  ,  , 1 ],
-    [ 1,  ,  ,  ,  , 1, 1,  ,  , 1, 1,  ,  ,  ,  , 1 ],
-    [ 1,  ,  ,  ,  , 1, 1,  ,  , 1, 1,  ,  ,  ,  , 1 ],
-    [ 1,  ,  ,  ,  , 1, 1,  ,  , 1, 1,  ,  ,  ,  , 1 ],
-    [ 1,  ,  ,  ,  , 1, 1,  ,  , 1, 1,  ,  ,  ,  , 1 ],
-    [  ,  , 1, 1, 1, 1, 1,  ,  , 1, 1,  ,  ,  ,  , 1 ],
-    [  ,  , 1, 1, 1, 1, 1,  ,  , 1, 1,  ,  ,  ,  , 1 ],
-    [ 1,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , 1 ],
-    [ 1,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  , 1 ],
-    [ 1, 1, 1, 1, 1, 1, 1, 1, 1,  ,  , 1, 1, 1, 1, 1 ]
-  ];
-  favc.width = favc.height = 16;
-  favctx.beginPath();
-  for (let y = 0; y < 16; y++) {
-    for (let x = 0; x < 16; x++) {
-      if (faviconGrid[y][x] === 1) {
-        favctx.rect(x, y, 1, 1);
-      }
-    }
-  }
-  favctx.fillStyle =
-    window.matchMedia &&
-    window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "#fff"
-      : "#000";
-  favctx.fill();
-  favicon.href = favc.toDataURL();
 };
 
 /*==============================================================================
