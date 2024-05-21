@@ -6,14 +6,14 @@ Radius Raid is a space themed shoot 'em up where you must blast away unrelenting
 
 This was originally an entry for [js13kGames](http://js13kgames.com) 2013, but has since received a few updates and bug fixes. It won [1st place](https://2013.js13kgames.com/#winners)!
 
-# Controls
+## Controls
 
 **Move:** WASD/Arrows\
 **Aim/Fire:** Mouse\
 **Pause:** P/Esc\
 **Mute:** M
 
-# Credits
+## Credits
 
 **Created By:** [@jackrugile](https://twitter.com/jackrugile)\
 **Inspiration and Support:** [@rezoner](https://twitter.com/rezoner), [@loktar00](https://twitter.com/loktar00), [@end3r](https://twitter.com/end3r), [@austinhallock](https://twitter.com/austinhallock), [@chandlerprall](https://twitter.com/chandlerprall)\
@@ -22,7 +22,7 @@ This was originally an entry for [js13kGames](http://js13kgames.com) 2013, but h
 **HTML5 Canvas Reference:** [HTML5 Canvas Cheat Sheet](https://simon.html5.org/dump/html5-canvas-cheat-sheet.html)\
 **Game Math Reference:** Billy Lamberta - [Foundation HTML5 Animation with JavaScript](http://lamberta.github.io/html5-animation/)
 
-# Screenshots
+## Screenshots
 
 ![Radius Raid Menu](http://jackrugile.com/radius-raid/images/menu-screenshot.png "Radius Raid Menu")
 
