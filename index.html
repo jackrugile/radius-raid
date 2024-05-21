@@ -25,15 +25,18 @@
 
       #wrap {
         background: #000;
-        /* box-shadow: 0 0 0 1px #222; */
         opacity: 0;
-        overflow: hidden;
         position: relative;
         transition: opacity 1000ms;
       }
 
       .loaded #wrap {
         opacity: 1;
+      }
+
+      #wrap-inner {
+        overflow: hidden;
+        position: relative;
       }
 
       #cbg1,
@@ -44,24 +47,24 @@
         position: absolute;
         top: 0;
         pointer-events: none;
-        /* image-rendering: pixelated; */
       }
 
       #cmg {
         cursor: crosshair;
         display: block;
         position: relative;
-        /* image-rendering: pixelated; */
       }
     </style>
   </head>
   <body>
     <div id="wrap">
-      <canvas id="cbg1"></canvas>
-      <canvas id="cbg2"></canvas>
-      <canvas id="cbg3"></canvas>
-      <canvas id="cbg4"></canvas>
-      <canvas id="cmg"></canvas>
+      <div id="wrap-inner">
+        <canvas id="cbg1"></canvas>
+        <canvas id="cbg2"></canvas>
+        <canvas id="cbg3"></canvas>
+        <canvas id="cbg4"></canvas>
+        <canvas id="cmg"></canvas>
+      </div>
     </div>
     <script>
       let $ = {};
